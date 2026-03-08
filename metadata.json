@@ -1,0 +1,5 @@
+{
+  "name": "Trucking Driver Application",
+  "description": "FMCSA-compliant driver application for trucking companies, featuring multi-step forms, address history, license verification, and digital disclosures.",
+  "requestFramePermissions": ["camera"]
+}

@@ -1,0 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  
+  --color-logistics-blue: #1258e2;
+  --color-logistics-bg-light: #f6f6f8;
+  --color-logistics-bg-dark: #101622;
+}
+
+@layer base {
+  body {
+    @apply bg-logistics-bg-light text-slate-900 antialiased font-sans;
+  }
+
+  .dark body {
+    @apply bg-logistics-bg-dark text-slate-100;
+  }
+}
