@@ -1,0 +1,80 @@
+steps:
+  # --- BACKEND ---
+  # 1. Build the backend image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/truck-driver-api', './backend']
+    id: 'build-backend'
+
+  # 2. Push the backend image to GCR
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/truck-driver-api']
+    id: 'push-backend'
+    waitFor: ['build-backend']
+
+  # 3. Deploy backend to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'truck-driver-api'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/truck-driver-api'
+      - '--region'
+      - 'us-central1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+    id: 'deploy-backend'
+    waitFor: ['push-backend']
+
+  # --- FRONTEND ---
+  # 4. Get the Backend URL
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        BACKEND_URL=$(gcloud run services describe truck-driver-api --platform managed --region us-central1 --format 'value(status.url)')
+        echo "BACKEND_URL is $$BACKEND_URL"
+        echo "$$BACKEND_URL" > backend_url.txt
+    id: 'get-backend-url'
+    waitFor: ['deploy-backend']
+
+  # 4.5 Build the frontend image
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        BACKEND_URL=$(cat backend_url.txt)
+        docker build --build-arg VITE_API_URL=$$BACKEND_URL --build-arg GEMINI_API_KEY=$_GEMINI_API_KEY -t gcr.io/$PROJECT_ID/truck-driver-frontend .
+    id: 'build-frontend'
+    waitFor: ['get-backend-url']
+
+  # 5. Push the frontend image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/truck-driver-frontend']
+    id: 'push-frontend'
+    waitFor: ['build-frontend']
+
+  # 6. Deploy frontend to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'truck-driver-frontend'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/truck-driver-frontend'
+      - '--region'
+      - 'us-central1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+    id: 'deploy-frontend'
+    waitFor: ['push-frontend']
+
+images:
+  - 'gcr.io/$PROJECT_ID/truck-driver-api'
+  - 'gcr.io/$PROJECT_ID/truck-driver-frontend'

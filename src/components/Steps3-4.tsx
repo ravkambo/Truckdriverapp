@@ -1,331 +1,182 @@
 import { useFormContext, useFieldArray } from 'react-hook-form';
-import { Input, Select } from './FormElements';
-import { Plus, Trash2, Camera, Loader2 } from 'lucide-react';
-import { type FullApplication } from '../types/form';
-import React, { useState } from 'react';
-import { extractLicenseData } from '../services/geminiService';
+import { Input, Select, RadioGroup, Checkbox } from './FormElements';
+import { Plus, Trash2 } from 'lucide-react';
 import { cn } from '../lib/utils';
 
-export function Licenses() {
-  const { register, control, formState: { errors }, setValue } = useFormContext<FullApplication>();
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: 'licenses'
-  });
+const EXP_TYPES = [
+  { id: 'straightTruck', label: 'Straight Truck' },
+  { id: 'tractorSemi', label: 'Tractor and Semi-Trailer' },
+  { id: 'tractorTwoTrailers', label: 'Tractor - Two Trailers' },
+  { id: 'flatbed', label: 'Flatbed' },
+  { id: 'hazmat', label: 'Hazmat' },
+  { id: 'dryvan', label: 'Dryvan' },
+  { id: 'reefer', label: 'Reefer' },
+  { id: 'tanker', label: 'Tanker' },
+  { id: 'lumber', label: 'Lumber' },
+  { id: 'crossBorderCanada', label: 'Cross-Border Canada and USA' },
+  { id: 'crossBorderUSA', label: 'Cross-Border USA and Mexico' },
+  { id: 'bondedLoads', label: 'Bonded Loads' },
+];
 
-  const [isScanning, setIsScanning] = useState<number | null>(null);
-
-  const handleScanLicense = async (index: number, event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    setIsScanning(index);
-    try {
-      const reader = new FileReader();
-      reader.onload = async (e) => {
-        const base64 = e.target?.result as string;
-        const data = await extractLicenseData(base64, file.type);
-        
-        if (data.licenseNumber) setValue(`licenses.${index}.licenseNumber`, data.licenseNumber);
-        if (data.state) setValue(`licenses.${index}.state`, data.state);
-        if (data.country) setValue(`licenses.${index}.country`, data.country);
-        if (data.class) setValue(`licenses.${index}.class`, data.class);
-        if (data.expirationDate) setValue(`licenses.${index}.expirationDate`, data.expirationDate);
-        if (data.physicalExpirationDate) setValue(`licenses.${index}.physicalExpirationDate`, data.physicalExpirationDate);
-      };
-      reader.readAsDataURL(file);
-    } catch (error) {
-      console.error("Scanning failed:", error);
-      alert("Failed to scan license. Please enter details manually.");
-    } finally {
-      setIsScanning(null);
-    }
-  };
+export function DrivingExperience() {
+  const { watch } = useFormContext();
 
   return (
     <div className="space-y-8">
-      <div className="border-b border-slate-100 dark:border-slate-800 pb-6 flex justify-between items-end">
-        <div>
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Licenses</h2>
-          <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">Driver license information and endorsements.</p>
-        </div>
-        <button
-          type="button"
-          onClick={() => append({} as any)}
-          className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest bg-logistics-blue text-white px-5 py-2.5 rounded-xl hover:opacity-90 transition-all shadow-lg shadow-logistics-blue/20"
-        >
-          <Plus size={14} /> Add License
-        </button>
+      <div>
+        <h2 className="text-2xl font-bold">Driving Experience</h2>
+        <p className="text-slate-500 dark:text-slate-400 text-sm">Please detail your experience with various equipment and load types.</p>
       </div>
 
-      {fields.map((field, index) => (
-        <div key={field.id} className="p-8 border border-slate-200 dark:border-slate-800 rounded-2xl space-y-6 relative bg-slate-50/50 dark:bg-slate-900/50">
-          {index > 0 && (
-            <button
-              type="button"
-              onClick={() => remove(index)}
-              className="absolute top-6 right-6 text-slate-400 hover:text-rose-500 transition-colors"
-            >
-              <Trash2 size={18} />
-            </button>
-          )}
-
-          <div className="flex flex-col gap-4 mb-8">
-            <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Scan License Document</label>
-            <div className="flex items-center gap-4">
-              <label className={cn(
-                "flex items-center gap-2 px-5 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors text-sm font-bold text-logistics-blue shadow-sm",
-                isScanning === index && "opacity-50 cursor-not-allowed"
-              )}>
-                {isScanning === index ? (
-                  <Loader2 size={16} className="animate-spin" />
-                ) : (
-                  <Camera size={16} />
-                )}
-                {isScanning === index ? "Scanning..." : "AI Auto-Fill Scan"}
-                <input
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={(e) => handleScanLicense(index, e)}
-                  disabled={isScanning === index}
-                />
-              </label>
-              <p className="text-[10px] text-slate-400 font-medium max-w-[150px] leading-tight">AI will automatically extract data and fill the fields below.</p>
-            </div>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Input
-              label="License Number"
-              {...register(`licenses.${index}.licenseNumber`)}
-              error={(errors.licenses as any)?.[index]?.licenseNumber?.message}
-            />
-            <Input
-              label="State/Province"
-              {...register(`licenses.${index}.state`)}
-              error={(errors.licenses as any)?.[index]?.state?.message}
-            />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Input
-              label="Country"
-              {...register(`licenses.${index}.country`)}
-              error={(errors.licenses as any)?.[index]?.country?.message}
-            />
-            <Input
-              label="License Class"
-              {...register(`licenses.${index}.class`)}
-              error={(errors.licenses as any)?.[index]?.class?.message}
-            />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Input
-              label="License Expiration Date"
-              type="date"
-              {...register(`licenses.${index}.expirationDate`)}
-              error={(errors.licenses as any)?.[index]?.expirationDate?.message}
-            />
-            <Input
-              label="Physical Expiration Date"
-              type="date"
-              {...register(`licenses.${index}.physicalExpirationDate`)}
-              error={(errors.licenses as any)?.[index]?.physicalExpirationDate?.message}
-            />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Select
-              label="Current License?"
-              options={[{ label: 'Yes', value: 'Yes' }, { label: 'No', value: 'No' }]}
-              {...register(`licenses.${index}.isCurrent`)}
-              error={(errors.licenses as any)?.[index]?.isCurrent?.message}
-            />
-            <Select
-              label="Commercial Driver License?"
-              options={[{ label: 'Yes', value: 'Yes' }, { label: 'No', value: 'No' }]}
-              {...register(`licenses.${index}.isCDL`)}
-              error={(errors.licenses as any)?.[index]?.isCDL?.message}
-            />
-          </div>
-
-          <Input
-            label="Endorsements"
-            {...register(`licenses.${index}.endorsements`)}
-            error={(errors.licenses as any)?.[index]?.endorsements?.message}
-          />
-        </div>
-      ))}
+      <div className="overflow-x-auto">
+        <table className="w-full text-left border-collapse">
+          <thead>
+            <tr className="border-b border-slate-100 dark:border-slate-800">
+              <th className="py-4 text-[10px] uppercase tracking-widest font-bold text-slate-400">Equipment / Load Type</th>
+              <th className="py-4 text-[10px] uppercase tracking-widest font-bold text-slate-400">Experience?</th>
+              <th className="py-4 text-[10px] uppercase tracking-widest font-bold text-slate-400">Years</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-50 dark:divide-slate-800/50">
+            {EXP_TYPES.map((type) => {
+              const hasExp = watch(`experience.${type.id}.hasExperience`);
+              return (
+                <tr key={type.id} className="group">
+                  <td className="py-4 text-sm font-bold text-slate-700 dark:text-slate-300">{type.label}</td>
+                  <td className="py-2">
+                    <RadioGroup 
+                      name={`experience.${type.id}.hasExperience`} 
+                      label="" 
+                      options={[{label:'Y', value:'Yes'}, {label:'N', value:'No'}]} 
+                      className="space-y-0"
+                    />
+                  </td>
+                  <td className="py-2">
+                    {hasExp === 'Yes' && (
+                      <Select 
+                        name={`experience.${type.id}.years`} 
+                        label="" 
+                        options={[
+                          { label: '1 Year', value: '1' },
+                          { label: '2 Years', value: '2' },
+                          { label: '3 Years', value: '3' },
+                          { label: '4 Years', value: '4' },
+                          { label: '5+ Years', value: '5+' },
+                        ]} 
+                        className="w-28"
+                      />
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      <Input name="experience.others" label="Others (Please describe)" placeholder="Any other specialized experience..." />
     </div>
   );
 }
 
-export function EmploymentHistory() {
-  const { register, control, formState: { errors } } = useFormContext<FullApplication>();
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: 'employment'
-  });
+export function LicenseDetails() {
+  const { control, watch } = useFormContext();
+  const { fields, append, remove } = useFieldArray({ control, name: "licenses" });
+
+  const LICENSE_CLASSES = [
+    { label: '', value: '' },
+    { label: 'Class A', value: 'Class A' },
+    { label: 'Class AZ', value: 'Class AZ' },
+    { label: 'Class B', value: 'Class B' },
+    { label: 'Class C', value: 'Class C' },
+    { label: 'Class D', value: 'Class D' },
+    { label: 'Class E', value: 'Class E' },
+    { label: 'Class F', value: 'Class F' },
+    { label: 'Class O', value: 'Class O' },
+    { label: 'Class R', value: 'Class R' },
+    { label: 'Class 1', value: 'Class 1' },
+    { label: 'Class 2', value: 'Class 2' },
+    { label: 'Class 3', value: 'Class 3' },
+    { label: 'Class 4', value: 'Class 4' },
+    { label: 'Class 5', value: 'Class 5' },
+    { label: 'Class A Permit', value: 'Class A Permit' },
+    { label: 'Class B Permit', value: 'Class B Permit' },
+    { label: 'Class G', value: 'Class G' },
+    { label: 'Class G1', value: 'Class G1' },
+    { label: 'Class G2', value: 'Class G2' },
+    { label: 'None', value: 'None' },
+  ];
+
+  const ENDORSEMENTS = ['None', 'Other', 'Tanker', 'Doubles / Triples', 'X Endorsement', 'HazMat'];
 
   return (
     <div className="space-y-8">
-      <div className="border-b border-slate-100 dark:border-slate-800 pb-6 flex justify-between items-end">
+      <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Employment History</h2>
-          <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">Provide at least 3 years of history (10 years for CMV drivers).</p>
+          <h2 className="text-2xl font-bold">License Details</h2>
+          <p className="text-slate-500 dark:text-slate-400 text-sm">Please list all driver licenses held in the past 3 years.</p>
         </div>
         <button
           type="button"
-          onClick={() => append({} as any)}
-          className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest bg-logistics-blue text-white px-5 py-2.5 rounded-xl hover:opacity-90 transition-all shadow-lg shadow-logistics-blue/20"
+          onClick={() => append({ endorsements: [], isCurrent: false, isCDL: false, country: 'USA' })}
+          className="flex items-center gap-2 text-xs font-bold bg-logistics-blue text-white px-4 py-2 rounded-xl hover:opacity-90 transition-all shadow-lg shadow-logistics-blue/20"
         >
-          <Plus size={14} /> Add Employer
+          <Plus size={16} /> Add License
         </button>
       </div>
 
       {fields.map((field, index) => (
-        <div key={field.id} className="p-8 border border-slate-200 dark:border-slate-800 rounded-2xl space-y-8 relative bg-slate-50/50 dark:bg-slate-900/50">
-          {index > 0 && (
-            <button
-              type="button"
-              onClick={() => remove(index)}
-              className="absolute top-6 right-6 text-slate-400 hover:text-rose-500 transition-colors"
-            >
-              <Trash2 size={18} />
-            </button>
-          )}
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Input
-              label="Company Name"
-              {...register(`employment.${index}.company`)}
-              error={(errors.employment as any)?.[index]?.company?.message}
-            />
-            <Input
-              label="Start Date"
-              type="date"
-              {...register(`employment.${index}.startDate`)}
-              error={(errors.employment as any)?.[index]?.startDate?.message}
-            />
-            <Input
-              label="End Date"
-              type="date"
-              {...register(`employment.${index}.endDate`)}
-              error={(errors.employment as any)?.[index]?.endDate?.message}
-            />
+        <div key={field.id} className="p-8 bg-slate-50 dark:bg-slate-800/30 rounded-3xl border border-slate-100 dark:border-slate-800 space-y-6">
+          <div className="flex justify-between items-center">
+            <h3 className="text-sm font-bold uppercase tracking-widest text-slate-400">License #{index + 1}</h3>
+            {index > 0 && (
+              <button type="button" onClick={() => remove(index)} className="text-rose-500 hover:text-rose-600 p-2">
+                <Trash2 size={20} />
+              </button>
+            )}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Input
-              label="Address"
-              {...register(`employment.${index}.address`)}
-              error={(errors.employment as any)?.[index]?.address?.message}
-            />
-            <Input
-              label="City, State, Zip"
-              {...register(`employment.${index}.cityStateZip`)}
-              error={(errors.employment as any)?.[index]?.cityStateZip?.message}
-            />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Input name={`licenses.${index}.licenseNumber`} label="License Number" />
+            <div className="grid grid-cols-2 gap-4">
+              <Input name={`licenses.${index}.state`} label="State/Prov" />
+              <Select name={`licenses.${index}.country`} label="Country" options={[{label:'USA', value:'USA'}, {label:'Canada', value:'Canada'}]} />
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Input
-              label="Country"
-              {...register(`employment.${index}.country`)}
-              error={(errors.employment as any)?.[index]?.country?.message}
-            />
-            <Input
-              label="Phone"
-              {...register(`employment.${index}.phone`)}
-              error={(errors.employment as any)?.[index]?.phone?.message}
-            />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Select name={`licenses.${index}.class`} label="License Class" options={LICENSE_CLASSES} />
+            <div className="grid grid-cols-2 gap-4">
+              <Input name={`licenses.${index}.expirationDate`} label="License Expiration" type="date" />
+              <Input name={`licenses.${index}.dotMedicalExpiration`} label="DOT Med Card Expiration" type="date" />
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Input
-              label="Position Held"
-              {...register(`employment.${index}.position`)}
-              error={(errors.employment as any)?.[index]?.position?.message}
-            />
-            <Input
-              label="Reason for leaving?"
-              {...register(`employment.${index}.reasonForLeaving`)}
-              error={(errors.employment as any)?.[index]?.reasonForLeaving?.message}
-            />
+          <div className="flex flex-wrap gap-8 py-4">
+            <Checkbox name={`licenses.${index}.isCurrent`} label="Is this your current driver's license?" />
+            <Checkbox name={`licenses.${index}.isCDL`} label="Is this a commercial driver license?" />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Select
-              label="Terminated/Laid off?"
-              options={[{ label: 'Yes', value: 'Yes' }, { label: 'No', value: 'No' }]}
-              {...register(`employment.${index}.terminated`)}
-              error={(errors.employment as any)?.[index]?.terminated?.message}
-            />
-            <Select
-              label="Current employer?"
-              options={[{ label: 'Yes', value: 'Yes' }, { label: 'No', value: 'No' }]}
-              {...register(`employment.${index}.isCurrent`)}
-              error={(errors.employment as any)?.[index]?.isCurrent?.message}
-            />
-            <Select
-              label="May we contact?"
-              options={[{ label: 'Yes', value: 'Yes' }, { label: 'No', value: 'No' }]}
-              {...register(`employment.${index}.mayContact`)}
-              error={(errors.employment as any)?.[index]?.mayContact?.message}
-            />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Select
-              label="Operate a CMV?"
-              options={[{ label: 'Yes', value: 'Yes' }, { label: 'No', value: 'No' }]}
-              {...register(`employment.${index}.operatedCMV`)}
-              error={(errors.employment as any)?.[index]?.operatedCMV?.message}
-            />
-            <Select
-              label="Subject to FMCSR?"
-              options={[{ label: 'Yes', value: 'Yes' }, { label: 'No', value: 'No' }]}
-              {...register(`employment.${index}.subjectToFMCSR`)}
-              error={(errors.employment as any)?.[index]?.subjectToFMCSR?.message}
-            />
-            <Select
-              label="Safety sensitive (DOT)?"
-              options={[{ label: 'Yes', value: 'Yes' }, { label: 'No', value: 'No' }]}
-              {...register(`employment.${index}.safetySensitive`)}
-              error={(errors.employment as any)?.[index]?.safetySensitive?.message}
-            />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Input
-              label="Areas Driven"
-              {...register(`employment.${index}.areasDriven`)}
-            />
-            <Input
-              label="Miles weekly"
-              {...register(`employment.${index}.milesWeekly`)}
-            />
-            <Input
-              label="Pay Range"
-              {...register(`employment.${index}.payRange`)}
-            />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Input
-              label="Common Truck"
-              {...register(`employment.${index}.truckType`)}
-            />
-            <Input
-              label="Common Trailer"
-              {...register(`employment.${index}.trailerType`)}
-            />
-            <Input
-              label="Trailer Length"
-              {...register(`employment.${index}.trailerLength`)}
-            />
+          <div className="space-y-4">
+            <label className="text-[10px] uppercase tracking-widest font-bold text-slate-400">Endorsements (Select all that apply)</label>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {ENDORSEMENTS.map(e => (
+                <label key={e} className="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 cursor-pointer hover:border-logistics-blue transition-all group">
+                   <div className={cn(
+                    "w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all",
+                    (watch(`licenses.${index}.endorsements`) || []).includes(e) ? "bg-logistics-blue border-logistics-blue" : "border-slate-200 dark:border-slate-700 group-hover:border-slate-300"
+                  )}>
+                    {(watch(`licenses.${index}.endorsements`) || []).includes(e) && <div className="w-2.5 h-2.5 bg-white rounded-sm" />}
+                  </div>
+                  <input 
+                    type="checkbox" 
+                    value={e} 
+                    {...control.register(`licenses.${index}.endorsements`)} 
+                    className="hidden" 
+                  />
+                  <span className="text-sm font-bold text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white">{e}</span>
+                </label>
+              ))}
+            </div>
           </div>
         </div>
       ))}

@@ -1,99 +1,115 @@
-import React from 'react';
+import { useFormContext } from 'react-hook-form';
 import { cn } from '../lib/utils';
+import React from 'react';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  name: string;
   label: string;
-  error?: string;
+  className?: string;
 }
 
-export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ label, error, className, ...props }, ref) => {
-    return (
-      <div className="flex flex-col gap-1.5 w-full">
-        <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">
-          {label}
-        </label>
-        <input
-          ref={ref}
-          className={cn(
-            "flex h-11 w-full rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-logistics-blue focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all dark:bg-slate-900 dark:border-slate-800 dark:ring-offset-slate-950 dark:placeholder:text-slate-500",
-            error && "border-rose-500 focus-visible:ring-rose-500 dark:border-rose-500",
-            className
-          )}
-          {...props}
-        />
-        {error && <span className="text-[10px] font-semibold text-rose-500">{error}</span>}
-      </div>
-    );
-  }
-);
+export function Input({ name, label, className, ...props }: InputProps) {
+  const { register, formState: { errors } } = useFormContext();
+  const error = (errors as any)[name.split('.')[0]]?.[name.split('.')[1]] || (errors as any)[name];
 
-Input.displayName = 'Input';
+  return (
+    <div className={cn("space-y-1.5", className)}>
+      <label className="text-[10px] uppercase tracking-widest font-bold text-slate-400 ml-1">{label}</label>
+      <input
+        {...register(name)}
+        className={cn(
+          "w-full bg-slate-50 dark:bg-slate-800/50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-logistics-blue transition-all outline-none",
+          error && "ring-2 ring-rose-500"
+        )}
+        {...props}
+      />
+      {error && <p className="text-[10px] text-rose-500 font-bold uppercase tracking-tight ml-1">{error.message}</p>}
+    </div>
+  );
+}
 
 interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+  name: string;
   label: string;
   options: { label: string; value: string }[];
-  error?: string;
+  className?: string;
 }
 
-export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
-  ({ label, options, error, className, ...props }, ref) => {
-    return (
-      <div className="flex flex-col gap-1.5 w-full">
-        <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">
-          {label}
-        </label>
-        <select
-          ref={ref}
-          className={cn(
-            "flex h-11 w-full rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm ring-offset-white placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-logistics-blue focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all dark:bg-slate-900 dark:border-slate-800 dark:ring-offset-slate-950 dark:placeholder:text-slate-500",
-            error && "border-rose-500 focus-visible:ring-rose-500 dark:border-rose-500",
-            className
-          )}
-          {...props}
-        >
-          <option value="">Select an option</option>
-          {options.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
-        {error && <span className="text-[10px] font-semibold text-rose-500">{error}</span>}
-      </div>
-    );
-  }
-);
+export function Select({ name, label, options, className, ...props }: SelectProps) {
+  const { register, formState: { errors } } = useFormContext();
+  const error = (errors as any)[name.split('.')[0]]?.[name.split('.')[1]] || (errors as any)[name];
 
-Select.displayName = 'Select';
+  return (
+    <div className={cn("space-y-1.5", className)}>
+      <label className="text-[10px] uppercase tracking-widest font-bold text-slate-400 ml-1">{label}</label>
+      <select
+        {...register(name)}
+        className={cn(
+          "w-full bg-slate-50 dark:bg-slate-800/50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-logistics-blue transition-all outline-none appearance-none",
+          error && "ring-2 ring-rose-500"
+        )}
+        {...props}
+      >
+        {options.map((opt) => (
+          <option key={opt.value} value={opt.value}>{opt.label}</option>
+        ))}
+      </select>
+      {error && <p className="text-[10px] text-rose-500 font-bold uppercase tracking-tight ml-1">{error.message}</p>}
+    </div>
+  );
+}
 
-interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface RadioGroupProps {
+  name: string;
   label: string;
-  error?: string;
+  options: { label: string; value: string }[];
+  className?: string;
 }
 
-export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
-  ({ label, error, className, ...props }, ref) => {
-    return (
-      <div className="flex flex-col gap-1.5">
-        <label className="flex items-start gap-3 cursor-pointer group">
-          <input
-            type="checkbox"
-            ref={ref}
-            className={cn(
-              "mt-1 h-4 w-4 rounded border-slate-300 text-logistics-blue focus:ring-logistics-blue dark:border-slate-700 dark:bg-slate-900",
-              className
-            )}
-            {...props}
-          />
-          <span className="text-sm text-slate-700 leading-tight group-hover:text-logistics-blue transition-colors dark:text-slate-300 dark:group-hover:text-logistics-blue">
-            {label}
-          </span>
-        </label>
-        {error && <span className="text-[10px] font-semibold text-rose-500">{error}</span>}
-      </div>
-    );
-  }
-);
+export function RadioGroup({ name, label, options, className, ...props }: RadioGroupProps & { key?: string }) {
+  const { register, watch, formState: { errors } } = useFormContext();
+  const error = (errors as any)[name.split('.')[0]]?.[name.split('.')[1]] || (errors as any)[name];
+  const currentValue = watch(name);
 
-Checkbox.displayName = 'Checkbox';
+  return (
+    <div className={cn("space-y-3", className)}>
+      <label className="text-[10px] uppercase tracking-widest font-bold text-slate-400 ml-1">{label}</label>
+      <div className="flex gap-4">
+        {options.map((opt) => (
+          <label key={opt.value} className={cn(
+            "flex-1 flex items-center justify-center gap-2 p-3 rounded-xl border-2 transition-all cursor-pointer",
+            currentValue === opt.value 
+              ? "bg-logistics-blue border-logistics-blue text-white" 
+              : "border-slate-100 dark:border-slate-800 hover:border-slate-200 dark:hover:border-slate-700"
+          )}>
+            <input type="radio" value={opt.value} {...register(name)} className="hidden" />
+            <span className="text-sm font-bold">{opt.label}</span>
+          </label>
+        ))}
+      </div>
+      {error && <p className="text-[10px] text-rose-500 font-bold uppercase tracking-tight ml-1">{error.message}</p>}
+    </div>
+  );
+}
+
+export function Checkbox({ name, label, className }: { name: string; label: string; className?: string }) {
+  const { register, watch, formState: { errors } } = useFormContext();
+  const error = (errors as any)[name.split('.')[0]]?.[name.split('.')[1]] || (errors as any)[name];
+  const isChecked = watch(name);
+
+  return (
+    <div className={cn("space-y-1", className)}>
+      <label className="flex items-start gap-3 cursor-pointer group">
+        <div className={cn(
+          "mt-0.5 w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all",
+          isChecked ? "bg-logistics-blue border-logistics-blue" : "border-slate-200 dark:border-slate-700 group-hover:border-slate-300"
+        )}>
+          {isChecked && <div className="w-2.5 h-2.5 bg-white rounded-sm" />}
+        </div>
+        <input type="checkbox" {...register(name)} className="hidden" />
+        <span className="text-sm leading-tight text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">{label}</span>
+      </label>
+      {error && <p className="text-[10px] text-rose-500 font-bold uppercase tracking-tight ml-1">{error.message}</p>}
+    </div>
+  );
+}
