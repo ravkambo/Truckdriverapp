@@ -80,3 +80,6 @@ steps:
 images:
   - 'gcr.io/$PROJECT_ID/truck-driver-api'
   - 'gcr.io/$PROJECT_ID/truck-driver-frontend'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
