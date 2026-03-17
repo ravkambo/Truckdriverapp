@@ -1,0 +1,167 @@
+UX ACTION PLAN — TRUCKDRIVERAPP
+Date: 2026-03-16
+Based on: ux-review.txt
+=======================================================
+
+SEQUENCING RULE
+---------------
+Foundational issues first, cosmetic polish last.
+Phases 1-2 before any user testing.
+Phases 3-4 before beta.
+Phase 5 before launch.
+Phase 6 anytime.
+
+
+=======================================================
+PHASE 1 — FIX WHAT MAKES IT UNUSABLE
+=======================================================
+These are blocking issues. Every other improvement sits on top of them.
+
+1. Label font size & color
+   File:   src/components/FormElements.tsx
+   Change: text-[10px] text-slate-400 -> text-sm text-slate-700
+   Notes:  One change in FormElements.tsx fixes every field in the entire
+           app instantly. Highest ROI of anything on the list.
+
+2. Add visible dropdown arrow to <Select>
+   File:   src/components/FormElements.tsx
+   Change: Add a custom chevron icon alongside appearance-none.
+           Currently all selects look identical to plain text inputs.
+   Notes:  One change, affects every dropdown in the app.
+
+3. Mark required fields
+   File:   src/components/FormElements.tsx + all step components
+   Change: Add a required prop to Input/Select. Show a * indicator in
+           the label for required fields.
+   Notes:  Must be decided and implemented before any user testing.
+
+4. Error message font size
+   File:   src/components/FormElements.tsx
+   Change: Error text is also text-[10px]. Bump to text-xs or text-sm.
+   Notes:  Do this at the same time as item 1 while already in the file.
+
+
+=======================================================
+PHASE 2 — FIX MOBILE LAYOUT BREAKAGES
+=======================================================
+
+5. Replace the Driving Experience table with stacked cards
+   File:   src/components/Steps3-4.tsx
+   Change: Remove the <table> layout. Rebuild as a vertical list of
+           cards, each showing the equipment name with a Yes/No toggle
+           and a years field inline beneath it.
+   Notes:  The table requires horizontal scrolling inside a vertically
+           scrolling page — one of the worst mobile patterns possible.
+           The Y/N radio labels should also become Yes/No at this point.
+
+6. Fix "drag to upload" copy
+   File:   src/components/Step9-Documents.tsx
+   Change: "Click or drag to upload" -> "Tap to upload a file"
+   Notes:  Drag-and-drop does not exist on mobile. One-line fix.
+
+
+=======================================================
+PHASE 3 — REDUCE CONFUSION & ANXIETY
+=======================================================
+
+7. Add plain-English hints for jargon
+   Files:  src/components/Steps1-2.tsx, Steps3-4.tsx, Steps7-8.tsx
+   Terms:  TWIC, FMCSR, PSP, DD214, SSN/SIN, X Endorsement
+   Change: Add a small (?) tooltip or inline <p> hint beneath each
+           jargon label with a one-sentence plain-English explanation.
+   Example: TWIC — "Transportation Worker Identification Credential.
+            Required for port and secure facility access."
+
+8. Rewrite the DOT employment notice
+   File:   src/components/Steps5-6.tsx
+   Change: Replace "for the 7 years preceding that 3 years" with
+           "up to 10 years of employment history total."
+   Notes:  The current phrasing requires mental arithmetic to parse.
+
+9. Add empty-state guidance on License & Employment steps
+   Files:  src/components/Steps3-4.tsx, Steps5-6.tsx
+   Change: Add a short instructional line above the "Add License" and
+           "Add Employer" buttons so users don't stare at a blank screen.
+   Example: "Click 'Add License' below to enter your first license."
+
+10. SSN field — numeric keypad + masking + reassurance note
+    File:   src/components/Steps1-2.tsx
+    Change: Add inputMode="numeric" to trigger the number keyboard.
+            Auto-format input as XXX-XX-XXXX while typing.
+            Add a small note below: "Required for background check.
+            Your data is encrypted and stored securely."
+
+11. Fix scrollable legal text boxes in Disclosures
+    File:   src/components/Steps7-8.tsx
+    Change: Remove max-h-40 overflow-y-auto from the legal text sections.
+            Let the text render fully expanded on the page.
+    Notes:  On mobile, a scrollable box inside a scrollable page causes
+            the page to stop scrolling unexpectedly. Users think it froze.
+
+12. Add PSP acknowledgment checkbox
+    File:   src/components/Steps7-8.tsx
+    Change: The PSP Authorization section has a heading and a link but
+            no checkbox. Add one to match all other disclosure sections.
+    Notes:  This is also a legal gap — no record of user acknowledgment.
+
+
+=======================================================
+PHASE 4 — STRUCTURED DATA & FORM LOGIC
+=======================================================
+
+13. Split previous-work-details into proper fields
+    File:   src/components/Steps1-2.tsx
+    Change: Replace the single general.previousWorkDetails text input
+            (which asks for 4 things at once) with discrete fields:
+            startDate, endDate, location, position, reasonForLeaving.
+    Notes:  The placeholder disappears on tap. Users type one thing and
+            forget the rest.
+
+14. Remove GPA from driver training school section
+    File:   src/components/Steps5-6.tsx
+    Change: Delete the GPA input field from the training school form.
+    Notes:  Truck driving schools do not issue GPAs. This field will
+            confuse or irritate every applicant who sees it.
+
+15. Add DOT context to unemployment section
+    File:   src/components/Steps5-6.tsx
+    Change: Add a one-line note beneath the unemployment question:
+            "Required by DOT regulations for all applicants."
+    Notes:  Without context, this question feels accusatory to drivers
+            who took a short break between jobs.
+
+
+=======================================================
+PHASE 5 — SAVE & RESUME  (Biggest effort, highest retention impact)
+=======================================================
+
+16. Add save-and-resume functionality
+    Files:  src/App.tsx (primary), src/components/* (as needed)
+    Change: Autosave form state to localStorage on every step change.
+            On page load, detect saved state and show a prompt:
+            "You have an application in progress. Resume where you left off?"
+            Include a "Start Over" option that clears saved state.
+    Notes:  This is a 30-45 minute form. Any phone call, lock screen,
+            or lost connection currently means starting from scratch.
+            Form abandonment is guaranteed without this.
+
+
+=======================================================
+PHASE 6 — POLISH
+=======================================================
+
+17. Y / N -> Yes / No
+    Files:  src/components/Steps3-4.tsx, Steps7-8.tsx
+    Change: All abbreviated radio labels (Y, N) should be full words.
+
+18. Localize field labels based on country
+    Files:  src/components/Steps1-2.tsx, Steps3-4.tsx, Steps5-6.tsx
+    Change: "State/Prov" -> "State" and "Zip/Postal" -> "Zip Code"
+            for US applicants. If Canada is selected, switch labels
+            to "Province" and "Postal Code" dynamically.
+
+19. Download PDF button on mobile
+    File:   src/App.tsx
+    Change: The Download PDF button is hidden md:flex (desktop only).
+            Consider surfacing it on the success/confirmation screen
+            so mobile users can still save a copy after submitting.

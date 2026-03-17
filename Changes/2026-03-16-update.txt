@@ -1,0 +1,88 @@
+DATE: 2026-03-16
+PROJECT: Truckdriverapp
+AUTHOR: Claude (Anthropic)
+=======================================================
+
+SUMMARY
+-------
+Removed all Convex dependencies and related files. Wired form submission
+to the existing Python (FastAPI) backend. Cleaned up dead code and unused
+packages left over from Gemini-generated scaffolding. Fixed pre-existing
+TypeScript errors.
+
+
+FILES REMOVED
+-------------
+- convex/                          (entire folder)
+  - convex/schema.ts
+  - convex/applications.ts
+  - convex/_generated/api.d.ts
+  - convex/_generated/api.js
+  - convex/_generated/dataModel.d.ts
+  - convex/_generated/server.d.ts
+  - convex/_generated/server.js
+- scripts/submitSampleData.mjs     (Convex test script, no longer needed)
+- test_experienced_driver.ts       (dev artifact)
+- src/services/geminiService.ts    (dead code, never imported anywhere)
+
+
+FILES MODIFIED
+--------------
+src/main.tsx
+  - Removed ConvexProvider and ConvexReactClient imports
+  - Removed ConvexProvider wrapper around <App />
+  - App now renders directly inside StrictMode
+
+src/App.tsx
+  - Removed: import { useMutation } from 'convex/react'
+  - Removed: import { api } from '../convex/_generated/api'
+  - Replaced useMutation(api.applications.submitApplication) with a
+    fetch() POST call to the Python backend at VITE_API_URL/submit-application
+  - Error handling reads err.detail from FastAPI error responses
+
+package.json
+  - Renamed: "react-example" -> "truckdriverapp"
+  - Removed dependencies:
+      convex
+      @google/genai
+      better-sqlite3
+      express
+      dotenv
+  - Removed devDependencies:
+      @types/express
+  - Result: 203 packages removed from node_modules
+
+.env.example
+  - Removed: GEMINI_API_KEY, VITE_CONVEX_URL, APP_URL
+  - Added:   VITE_API_URL (points to FastAPI backend, default http://localhost:8000)
+
+
+FILES CREATED
+-------------
+src/vite-env.d.ts
+  - Adds: /// <reference types="vite/client" />
+  - Fixes import.meta.env type resolution (was missing from project)
+
+Changes/2026-03-16-update.txt
+  - This file
+
+
+PRE-EXISTING BUGS FIXED
+-----------------------
+- Installed missing devDependencies @types/react and @types/react-dom
+  These were never installed, causing TypeScript to fail to resolve
+  React.InputHTMLAttributes across all form components (FormElements.tsx).
+  Affected: type, placeholder, readOnly props on <Input /> throughout
+  Steps1-2.tsx, Steps3-4.tsx, Steps5-6.tsx, Steps7-8.tsx, Step9-Documents.tsx
+
+- npm run lint now passes with 0 errors
+
+
+NOTES
+-----
+- The Python FastAPI backend (backend/) is unchanged and remains the
+  submission target. Ensure VITE_API_URL is set correctly in .env.local
+  before running in development.
+- The form submission payload sent to /submit-application is the full
+  FullApplication object (raw JSON). The backend already handles this
+  shape via its ApplicationSubmission model.

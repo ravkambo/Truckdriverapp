@@ -1,6 +1,4 @@
 import { useState, useMemo, useEffect } from 'react';
-import { useMutation } from 'convex/react';
-import { api } from '../convex/_generated/api';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion, AnimatePresence } from 'motion/react';
@@ -165,20 +163,21 @@ export default function App() {
   };
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const submitApplication = useMutation(api.applications.submitApplication);
 
   const onSubmit = async (data: FullApplication) => {
     setIsSubmitting(true);
     try {
-      await submitApplication({
-        firstName: data.personal?.firstName ?? '',
-        lastName: data.personal?.lastName ?? '',
-        email: data.personal?.email ?? '',
-        phone: data.personal?.phone ?? '',
-        rawData: JSON.stringify(data),
+      const response = await fetch(`${import.meta.env.VITE_API_URL ?? ''}/submit-application`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
       });
 
-      console.log('Form successfully saved to Convex');
+      if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        throw new Error(err.detail ?? 'Submission failed');
+      }
+
       setIsSubmitted(true);
     } catch (error) {
       console.error('Submission error:', error);

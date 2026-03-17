@@ -1,0 +1,185 @@
+BRUTAL UX REVIEW: 55-YEAR-OLD TRUCK DRIVER ON MOBILE
+=====================================================
+Date: 2026-03-16
+Reviewer: Claude (Anthropic)
+Scope: All 9 form steps in /src/components
+
+
+1. THE LABELS ARE NEARLY INVISIBLE
+-----------------------------------
+This is the single biggest problem in the entire app.
+
+Every label in FormElements.tsx:17 is:
+  text-[10px] uppercase tracking-widest font-bold text-slate-400
+
+10 pixels. Light gray. All caps. Stretched letter-spacing. On a phone screen,
+those labels are nearly unreadable for anyone, let alone someone who might wear
+reading glasses. A 55-year-old squinting at their phone in a truck stop parking
+lot has zero chance. This applies to every single field in the entire form.
+
+
+2. ZERO REQUIRED FIELD INDICATORS
+-----------------------------------
+Not a single field is marked as required. The driver has no idea which fields
+they can skip and which will block them from submitting. They'll fill out the
+whole thing, hit submit, and then get a wall of red errors they have to hunt for.
+
+
+3. THE DRIVING EXPERIENCE TABLE WILL BREAK ON MOBILE
+-----------------------------------------------------
+Steps3-4.tsx:32 — A <table> with three columns rendered inside overflow-x-auto.
+On a phone, the user has to horizontally scroll a table while filling out a
+multi-step form on a page that also scrolls vertically. This is one of the most
+confusing mobile UI patterns that exists. The radio buttons inside are labeled
+just "Y" and "N" — not "Yes" and "No". A confused driver will tap Y/N, the page
+will scroll sideways, and they'll lose their place.
+
+
+4. THE FORM STARTS EMPTY ON CRITICAL STEPS
+-------------------------------------------
+Steps 4, 5, and 6 (License Details, Employment, Training) all start completely
+blank with just a small "+ Add License / + Add Employer" button in the corner.
+A non-tech user will stare at a white screen and think the page didn't load.
+There is no instruction that says "Click the button above to add your first
+license." The button is small and positioned top-right where it blends into
+the header.
+
+
+5. JARGON EVERYWHERE, NO EXPLANATIONS
+---------------------------------------
+This form is aimed at truck drivers, not lawyers. Here's what is unexplained:
+
+- TWIC card — no explanation. Port entry card. Many drivers have never needed one.
+- FMCSR — step title says "Federal Motor Carrier Safety Regulations" in the
+  subtitle, but that's 8px gray text most will skip.
+- DD214 — military discharge document. No hint for veterans who may not
+  remember the term.
+- FMCSR / TC safety regs — "TC" is Transport Canada. Not explained anywhere.
+- PSP Authorization — no explanation at all. Just a link and a checkbox.
+- 49 C.F.R. PART 391.23 — a legal code citation as a section header. Means
+  nothing to a driver.
+- X Endorsement — no explanation. It's a combo HazMat + Tanker endorsement.
+- SSN / SIN — SIN is the Canadian Social Insurance Number. A US driver will
+  wonder if they're being asked about a criminal record.
+
+
+6. "DRAG TO UPLOAD" ON A PHONE
+--------------------------------
+Step9-Documents.tsx:52 — "Click or drag to upload"
+
+You cannot drag files on a mobile phone. This instruction actively confuses
+mobile users. They'll try to "drag" something and nothing will happen.
+
+
+7. SCROLLABLE LEGAL TEXT INSIDE A SCROLLABLE PAGE
+---------------------------------------------------
+Steps7-8.tsx:148 — max-h-40 overflow-y-auto
+
+There are two scrollable legal text boxes embedded in a page the user is
+already scrolling. On mobile, when your finger hits one of these boxes, you'll
+scroll the inner box, not the page. The user won't know why the page stopped
+scrolling. They'll think the app froze. The text inside is also text-[11px]
+italic light gray — illegible under any reasonable mobile conditions.
+
+
+8. PSP AUTHORIZATION HAS NO ACKNOWLEDGMENT CHECKBOX
+-----------------------------------------------------
+Steps7-8.tsx:139-144 — The PSP section has a heading and a link but no
+checkbox. Every other section has one. This looks like an accidental omission
+and creates a legal gap.
+
+
+9. THE PREVIOUS EMPLOYMENT SECTION REQUIRES AN ADDRESS FOR EVERY JOB
+----------------------------------------------------------------------
+For each employer: company name, street address, city, state, zip, country,
+phone, position, reason for leaving — plus 4 Yes/No questions. Most 55-year-old
+drivers won't remember the street address of a trucking company they left 6
+years ago. There's no hint like "Look this up on Google Maps" or "Approximate
+address is fine." They'll either quit the form or leave it blank and get
+an error.
+
+
+10. THE DOT NOTICE IS WRITTEN IN BUREAUCRATIC MATH
+----------------------------------------------------
+Steps5-6.tsx:17-20:
+  "...for the past 3 years. For the 7 years preceding that 3 years..."
+
+Read that out loud. "The 7 years preceding that 3 years" means go back 10 years
+total. Say that instead: "up to 10 years of employment history." A driver
+reading this on a phone at 7am before a shift will reread it three times, shrug,
+and guess.
+
+
+11. THE PREVIOUS WORK DETAILS FIELD IS ONE BOX FOR FOUR THINGS
+----------------------------------------------------------------
+Steps1-2.tsx:161:
+  label="Enter start/end dates, location, position, and reason for leaving"
+  placeholder="Dates: 2020-2022, Location: Chicago, Position: Driver, Reason: Relocation"
+
+This is a single <Input> (one line text box) asking for 4 pieces of structured
+data. The placeholder disappears the moment they tap it. They'll type "2019"
+and not know what else to add.
+
+
+12. SSN FIELD HAS NO MASKING
+------------------------------
+Steps1-2.tsx:49 — SSN is a plain text input. On mobile, the keyboard that opens
+is a standard keyboard — not a numeric keypad. There's no masking (it won't
+format as XXX-XX-XXXX while they type). Older users are also anxious about
+typing their SSN into a phone app — a small "Why do we need this?" tooltip
+would go a long way.
+
+
+13. SELECT DROPDOWNS HAVE NO VISIBLE ARROW
+-------------------------------------------
+FormElements.tsx:48 — appearance-none
+
+The native dropdown arrow is removed with appearance-none, and there's no
+custom chevron added. The field looks identical to a text input. A non-tech
+user won't know it's tappable or that it has options.
+
+
+14. THE UNEMPLOYMENT SECTION FEELS ACCUSATORY
+-----------------------------------------------
+Steps5-6.tsx:182:
+  "Have you been unemployed at any time within the last 3 years?"
+
+With no explanation of why this is being asked, a driver who took a month off
+between jobs might feel like they're being accused of something. A single
+sentence — "This is required by DOT regulations" — would dramatically reduce
+anxiety here.
+
+
+15. NO SAVE AND RESUME
+-----------------------
+This is a 9-step form that will take 30-45 minutes to complete. There is no
+visible save functionality. If the driver gets a call, loses connection, or
+their phone locks up, they start over. That is a form abandonment guaranteed.
+
+
+=====================================================
+SUMMARY: HIGHEST PRIORITY FIXES
+=====================================================
+
+CRITICAL
+--------
+- Label font size — go to at least 12-14px, normal weight, darker color
+- Mark required fields clearly
+- Replace the driving experience table with stacked mobile cards
+- Add "Save progress" / resume later
+
+HIGH
+----
+- Add a visible dropdown arrow to all <Select> elements
+- Fix "drag to upload" copy on mobile
+- Add plain-English explanations for TWIC, FMCSR, PSP, DD214
+- Split the previous-work-details single field into proper structured inputs
+- Add SSN numeric keypad and masking
+- Fix the scrollable-box-inside-scrollable-page legal sections
+
+MEDIUM
+------
+- Rewrite the DOT 3/7-year employment notice in plain English
+- Add empty-state guidance on License/Employment steps
+- Add a PSP acknowledgment checkbox
+- Remove "GPA" from driving school section
