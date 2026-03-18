@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion, AnimatePresence } from 'motion/react';
-import { ChevronLeft, ChevronRight, CheckCircle2, Truck, FileText, ShieldCheck, UserCheck, Sun, Moon, Phone, Download, Briefcase, GraduationCap, History, AlertTriangle } from 'lucide-react';
+import { ChevronLeft, ChevronRight, CheckCircle2, Truck, FileText, ShieldCheck, UserCheck, Sun, Moon, Download, Briefcase, GraduationCap, History, AlertTriangle } from 'lucide-react';
 import { 
   FullApplicationSchema, 
   type FullApplication,
@@ -10,11 +10,6 @@ import {
   GeneralInfoSchema,
   DrivingExperienceSchema,
   LicenseSchema,
-  MilitaryServiceSchema,
-  EmploymentSchema,
-  DriverTrainingSchoolSchema,
-  OtherEducationSchema,
-  UnemploymentSchema,
   FMCSRSchema,
   DocumentSchema,
   DisclosuresSchema,
@@ -161,25 +156,8 @@ export default function App() {
   };
 
   const stepCompletion = useMemo(() => {
-    return STEPS.map((step) => {
-      // Custom mapping for our combined steps if needed
-      let sectionData;
-      if (step.id === 'employment') {
-        // For employment history step, we'd ideally validate military, employment, training, education, and unemployment
-        const m = MilitaryServiceSchema.safeParse((formData as any).military);
-        const e = z.array(EmploymentSchema).safeParse((formData as any).employment);
-        const t = DriverTrainingSchoolSchema.safeParse((formData as any).training);
-        const ed = OtherEducationSchema.safeParse((formData as any).education);
-        const u = UnemploymentSchema.safeParse((formData as any).unemployment);
-        return m.success && e.success && t.success && ed.success && u.success;
-      }
-      
-      sectionData = (formData as any)[step.id];
-      if (!sectionData) return false;
-      const result = step.schema.safeParse(sectionData);
-      return result.success;
-    });
-  }, [formData]);
+    return STEPS.map((_, index) => index < currentStep);
+  }, [currentStep]);
 
   const nextStep = async () => {
     const fields = getFieldsForStep(currentStep);
@@ -300,10 +278,6 @@ export default function App() {
             >
               {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
             </button>
-            <a href="tel:6477662660" className="flex items-center gap-2 bg-logistics-blue text-white px-4 py-2.5 rounded-xl text-sm font-bold shadow-lg shadow-logistics-blue/20">
-              <Phone size={16} />
-              <span className="hidden sm:inline">647-766-2660</span>
-            </a>
           </div>
         </div>
       </header>

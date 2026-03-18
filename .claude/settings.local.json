@@ -5,7 +5,9 @@
       "Bash(npm run:*)",
       "Bash(grep:*)",
       "Bash(python -c \":*)",
-      "Bash(pip install:*)"
+      "Bash(pip install:*)",
+      "Bash(vercel --version)",
+      "Bash(vercel whoami:*)"
     ]
   }
 }
