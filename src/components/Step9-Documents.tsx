@@ -49,8 +49,8 @@ export function DocumentUpload() {
             <div className="w-16 h-16 bg-white dark:bg-slate-900 rounded-2xl shadow-sm flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
               <Upload className="text-logistics-blue" size={32} />
             </div>
-            <h3 className="text-lg font-bold">Click or drag to upload</h3>
-            <p className="text-slate-500 text-sm mt-1">Support for PDF, JPG, PNG (Max 10MB)</p>
+            <h3 className="text-lg font-bold">Tap to upload a file</h3>
+            <p className="text-slate-500 text-sm mt-1">PDF, JPG, or PNG — max 10MB</p>
           </div>
         </div>
 
@@ -65,7 +65,7 @@ export function DocumentUpload() {
                 <div className="flex justify-between items-start">
                   <div>
                     <p className="font-bold text-sm truncate max-w-[200px]">{(field as any).fileName}</p>
-                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-tight">
+                    <p className="text-xs text-slate-400 font-semibold uppercase tracking-tight">
                       {Math.round((field as any).fileSize / 1024)} KB
                     </p>
                   </div>

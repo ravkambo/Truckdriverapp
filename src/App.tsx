@@ -44,10 +44,14 @@ const STEPS = [
 
 const defaultExp = { hasExperience: 'No' as const, years: '' };
 
+const STORAGE_KEY = 'truck_driver_app_v1';
+
 export default function App() {
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [showResumePrompt, setShowResumePrompt] = useState(false);
+  const [readyToSave, setReadyToSave] = useState(false);
 
   // Extract company name from URL or default to Cargo Clarity
   const companyName = useMemo(() => {
@@ -95,13 +99,61 @@ export default function App() {
         violations: [], 
         accidents: [] 
       },
-      disclosures: { fcraAcknowledgment: false, consumerReportAuth: false, part391Auth: false },
+      disclosures: { fcraAcknowledgment: false, pspAcknowledgment: false, consumerReportAuth: false, part391Auth: false },
       signature: { agreedToElectronic: false, signatureDate: new Date().toISOString().split('T')[0] }
     }
   });
 
   const { handleSubmit, trigger, watch, getValues } = methods;
   const formData = watch();
+
+  // Check for saved progress on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        JSON.parse(saved);
+        setShowResumePrompt(true);
+      } else {
+        setReadyToSave(true);
+      }
+    } catch {
+      localStorage.removeItem(STORAGE_KEY);
+      setReadyToSave(true);
+    }
+  }, []);
+
+  // Autosave whenever form data or step changes
+  useEffect(() => {
+    if (readyToSave) {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ step: currentStep, values: formData }));
+      } catch {
+        // Ignore storage errors (e.g. quota exceeded with large file uploads)
+      }
+    }
+  }, [formData, currentStep, readyToSave]);
+
+  const handleResume = () => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const { step, values } = JSON.parse(saved);
+        methods.reset(values);
+        setCurrentStep(step ?? 0);
+      }
+    } catch {
+      localStorage.removeItem(STORAGE_KEY);
+    }
+    setShowResumePrompt(false);
+    setReadyToSave(true);
+  };
+
+  const handleStartOver = () => {
+    localStorage.removeItem(STORAGE_KEY);
+    setShowResumePrompt(false);
+    setReadyToSave(true);
+  };
 
   const handleDownloadPDF = () => {
     const data = getValues();
@@ -178,6 +230,7 @@ export default function App() {
         throw new Error(err.detail ?? 'Submission failed');
       }
 
+      localStorage.removeItem(STORAGE_KEY);
       setIsSubmitted(true);
     } catch (error) {
       console.error('Submission error:', error);
@@ -202,7 +255,13 @@ export default function App() {
           <p className="text-slate-500 dark:text-slate-400 leading-relaxed">
             Thank you for your interest. Your application has been received and is being processed. You will receive a copy via email shortly.
           </p>
-          <button 
+          <button
+            onClick={handleDownloadPDF}
+            className="w-full py-3 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all"
+          >
+            <Download size={18} /> Download PDF Copy
+          </button>
+          <button
             onClick={() => window.location.reload()}
             className="w-full py-3 bg-logistics-blue text-white rounded-xl font-bold uppercase tracking-widest hover:opacity-90 transition-all shadow-lg shadow-logistics-blue/20"
           >
@@ -248,6 +307,18 @@ export default function App() {
           </div>
         </div>
       </header>
+
+      {showResumePrompt && (
+        <div className="bg-amber-50 dark:bg-amber-900/20 border-b border-amber-200 dark:border-amber-800">
+          <div className="max-w-6xl mx-auto px-4 py-3 flex flex-col sm:flex-row items-start sm:items-center gap-3">
+            <p className="flex-1 text-sm font-semibold text-amber-900 dark:text-amber-200">You have an application in progress. Resume where you left off?</p>
+            <div className="flex gap-2 shrink-0">
+              <button onClick={handleResume} className="px-4 py-2 bg-logistics-blue text-white text-sm font-bold rounded-xl hover:opacity-90 transition-all">Resume</button>
+              <button onClick={handleStartOver} className="px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-sm font-bold rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 transition-all">Start Over</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <main className="max-w-6xl mx-auto px-4 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">

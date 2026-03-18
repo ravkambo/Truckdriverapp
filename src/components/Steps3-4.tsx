@@ -3,6 +3,8 @@ import { Input, Select, RadioGroup, Checkbox } from './FormElements';
 import { Plus, Trash2 } from 'lucide-react';
 import { cn } from '../lib/utils';
 
+function stateLabel(country?: string) { return country === 'Canada' ? 'Province' : 'State'; }
+
 const EXP_TYPES = [
   { id: 'straightTruck', label: 'Straight Truck' },
   { id: 'tractorSemi', label: 'Tractor and Semi-Trailer' },
@@ -28,50 +30,38 @@ export function DrivingExperience() {
         <p className="text-slate-500 dark:text-slate-400 text-sm">Please detail your experience with various equipment and load types.</p>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="border-b border-slate-100 dark:border-slate-800">
-              <th className="py-4 text-[10px] uppercase tracking-widest font-bold text-slate-400">Equipment / Load Type</th>
-              <th className="py-4 text-[10px] uppercase tracking-widest font-bold text-slate-400">Experience?</th>
-              <th className="py-4 text-[10px] uppercase tracking-widest font-bold text-slate-400">Years</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-50 dark:divide-slate-800/50">
-            {EXP_TYPES.map((type) => {
-              const hasExp = watch(`experience.${type.id}.hasExperience`);
-              return (
-                <tr key={type.id} className="group">
-                  <td className="py-4 text-sm font-bold text-slate-700 dark:text-slate-300">{type.label}</td>
-                  <td className="py-2">
-                    <RadioGroup 
-                      name={`experience.${type.id}.hasExperience`} 
-                      label="" 
-                      options={[{label:'Y', value:'Yes'}, {label:'N', value:'No'}]} 
-                      className="space-y-0"
-                    />
-                  </td>
-                  <td className="py-2">
-                    {hasExp === 'Yes' && (
-                      <Select 
-                        name={`experience.${type.id}.years`} 
-                        label="" 
-                        options={[
-                          { label: '1 Year', value: '1' },
-                          { label: '2 Years', value: '2' },
-                          { label: '3 Years', value: '3' },
-                          { label: '4 Years', value: '4' },
-                          { label: '5+ Years', value: '5+' },
-                        ]} 
-                        className="w-28"
-                      />
-                    )}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+      <div className="space-y-3">
+        {EXP_TYPES.map((type) => {
+          const hasExp = watch(`experience.${type.id}.hasExperience`);
+          return (
+            <div key={type.id} className="p-4 bg-slate-50 dark:bg-slate-800/30 rounded-2xl border border-slate-100 dark:border-slate-800">
+              <div className="flex flex-wrap items-center gap-4">
+                <span className="flex-1 text-sm font-bold text-slate-700 dark:text-slate-300 min-w-[140px]">{type.label}</span>
+                <RadioGroup
+                  name={`experience.${type.id}.hasExperience`}
+                  label=""
+                  options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]}
+                  className="space-y-0 shrink-0"
+                />
+              </div>
+              {hasExp === 'Yes' && (
+                <div className="mt-3 pt-3 border-t border-slate-200 dark:border-slate-700">
+                  <Select
+                    name={`experience.${type.id}.years`}
+                    label="Years of Experience"
+                    options={[
+                      { label: '1 Year', value: '1' },
+                      { label: '2 Years', value: '2' },
+                      { label: '3 Years', value: '3' },
+                      { label: '4 Years', value: '4' },
+                      { label: '5+ Years', value: '5+' },
+                    ]}
+                  />
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
       <Input name="experience.others" label="Others (Please describe)" placeholder="Any other specialized experience..." />
     </div>
@@ -81,6 +71,7 @@ export function DrivingExperience() {
 export function LicenseDetails() {
   const { control, watch } = useFormContext();
   const { fields, append, remove } = useFieldArray({ control, name: "licenses" });
+  const allLicenses = watch('licenses') || [];
 
   const LICENSE_CLASSES = [
     { label: '', value: '' },
@@ -124,6 +115,13 @@ export function LicenseDetails() {
         </button>
       </div>
 
+      {fields.length === 0 && (
+        <div className="text-center py-12 bg-slate-50 dark:bg-slate-800/30 rounded-3xl border-2 border-dashed border-slate-200 dark:border-slate-700">
+          <p className="text-slate-500 dark:text-slate-400 text-sm">No licenses added yet.</p>
+          <p className="text-slate-400 dark:text-slate-500 text-sm mt-1">Tap <strong>"Add License"</strong> above to enter your first license.</p>
+        </div>
+      )}
+
       {fields.map((field, index) => (
         <div key={field.id} className="p-8 bg-slate-50 dark:bg-slate-800/30 rounded-3xl border border-slate-100 dark:border-slate-800 space-y-6">
           <div className="flex justify-between items-center">
@@ -136,18 +134,18 @@ export function LicenseDetails() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Input name={`licenses.${index}.licenseNumber`} label="License Number" />
+            <Input name={`licenses.${index}.licenseNumber`} label="License Number" required />
             <div className="grid grid-cols-2 gap-4">
-              <Input name={`licenses.${index}.state`} label="State/Prov" />
+              <Input name={`licenses.${index}.state`} label={stateLabel(allLicenses[index]?.country)} required />
               <Select name={`licenses.${index}.country`} label="Country" options={[{label:'USA', value:'USA'}, {label:'Canada', value:'Canada'}]} />
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Select name={`licenses.${index}.class`} label="License Class" options={LICENSE_CLASSES} />
+            <Select name={`licenses.${index}.class`} label="License Class" required options={LICENSE_CLASSES} />
             <div className="grid grid-cols-2 gap-4">
-              <Input name={`licenses.${index}.expirationDate`} label="License Expiration" type="date" />
-              <Input name={`licenses.${index}.dotMedicalExpiration`} label="DOT Med Card Expiration" type="date" />
+              <Input name={`licenses.${index}.expirationDate`} label="License Expiration" type="date" required />
+              <Input name={`licenses.${index}.dotMedicalExpiration`} label="DOT Med Card Expiration" type="date" required />
             </div>
           </div>
 
@@ -157,7 +155,7 @@ export function LicenseDetails() {
           </div>
 
           <div className="space-y-4">
-            <label className="text-[10px] uppercase tracking-widest font-bold text-slate-400">Endorsements (Select all that apply)</label>
+            <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Endorsements (Select all that apply)</label>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {ENDORSEMENTS.map(e => (
                 <label key={e} className="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 cursor-pointer hover:border-logistics-blue transition-all group">
@@ -173,7 +171,9 @@ export function LicenseDetails() {
                     {...control.register(`licenses.${index}.endorsements`)} 
                     className="hidden" 
                   />
-                  <span className="text-sm font-bold text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white">{e}</span>
+                  <span className="text-sm font-bold text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white">
+                    {e}{e === 'X Endorsement' ? <span className="font-normal text-slate-400 dark:text-slate-500"> (HazMat + Tanker combo)</span> : ''}
+                  </span>
                 </label>
               ))}
             </div>

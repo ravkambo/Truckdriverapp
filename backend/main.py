@@ -1,4 +1,3 @@
-import json
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
@@ -38,7 +37,7 @@ def submit_application(data: ApplicationSubmission, db: Session = Depends(get_db
             last_name=personal_info.get("lastName", ""),
             email=personal_info.get("email", ""),
             phone=personal_info.get("phone", ""),
-            raw_data=json.dumps(data.dict())
+            raw_data=data.dict()
         )
         
         db.add(db_record)

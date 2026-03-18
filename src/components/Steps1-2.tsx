@@ -1,10 +1,46 @@
-import { useFormContext, useFieldArray } from 'react-hook-form';
+import { useFormContext, useFieldArray, useController } from 'react-hook-form';
 import { Input, Select, RadioGroup, Checkbox } from './FormElements';
 import { Plus, Trash2 } from 'lucide-react';
+
+function stateLabel(country?: string) { return country === 'Canada' ? 'Province' : 'State'; }
+function zipLabel(country?: string) { return country === 'Canada' ? 'Postal Code' : 'Zip Code'; }
+
+function SSNInput() {
+  const { control, formState: { errors } } = useFormContext();
+  const { field } = useController({ name: 'personal.ssn', control });
+  const error = (errors as any).personal?.ssn;
+
+  const formatSSN = (value: string) => {
+    const digits = value.replace(/\D/g, '').slice(0, 9);
+    if (digits.length > 5) return `${digits.slice(0,3)}-${digits.slice(3,5)}-${digits.slice(5)}`;
+    if (digits.length > 3) return `${digits.slice(0,3)}-${digits.slice(3)}`;
+    return digits;
+  };
+
+  return (
+    <div className="space-y-1">
+      <label className="text-sm font-semibold text-slate-700 dark:text-slate-300 ml-1">
+        SSN / SIN <span className="text-rose-500">*</span>
+      </label>
+      <input
+        {...field}
+        onChange={(e) => field.onChange(formatSSN(e.target.value))}
+        value={field.value || ''}
+        placeholder="000-00-0000"
+        inputMode="numeric"
+        className={`w-full bg-slate-50 dark:bg-slate-800/50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-logistics-blue transition-all outline-none${error ? ' ring-2 ring-rose-500' : ''}`}
+      />
+      {error && <p className="text-xs text-rose-500 font-semibold ml-1">{error.message}</p>}
+      <p className="text-xs text-slate-500 dark:text-slate-400 ml-1">Required for background check. Your data is encrypted and stored securely. (SIN = Canadian Social Insurance Number for Canadian applicants)</p>
+    </div>
+  );
+}
 
 export function PersonalInfo() {
   const { watch, control } = useFormContext();
   const residenceThreeYears = watch('personal.residenceThreeYears');
+  const personalCountry = watch('personal.country');
+  const prevAddresses = watch('personal.previousAddresses') || [];
   const { fields, append, remove } = useFieldArray({
     control,
     name: "personal.previousAddresses"
@@ -18,9 +54,9 @@ export function PersonalInfo() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Input name="personal.firstName" label="First Name" />
+        <Input name="personal.firstName" label="First Name" required />
         <Input name="personal.middleName" label="Middle Name" />
-        <Input name="personal.lastName" label="Last Name" />
+        <Input name="personal.lastName" label="Last Name" required />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -32,11 +68,11 @@ export function PersonalInfo() {
           { label: 'III', value: 'III' },
           { label: 'IV', value: 'IV' },
         ]} />
-        <Input name="personal.email" label="Email Address" type="email" placeholder="john.doe@example.com" />
+        <Input name="personal.email" label="Email Address" type="email" placeholder="john.doe@example.com" required />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Input name="personal.phone" label="Phone Number" placeholder="(555) 000-0000" />
+        <Input name="personal.phone" label="Phone Number" placeholder="(555) 000-0000" required />
         <Select name="personal.preferredContact" label="Preferred Contact Method" options={[
           { label: 'Cell Phone', value: 'Cell Phone' },
           { label: 'Email', value: 'Email' },
@@ -46,20 +82,20 @@ export function PersonalInfo() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Input name="personal.bestTimeToContact" label="Best Time to Contact" placeholder="e.g., Mornings after 9am" />
-        <Input name="personal.ssn" label="SSN / SIN" placeholder="000-00-0000" />
+        <SSNInput />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Input name="personal.dob" label="Date of Birth" type="date" />
+        <Input name="personal.dob" label="Date of Birth" type="date" required />
       </div>
 
       <div className="space-y-6 pt-4 border-t border-slate-100 dark:border-slate-800">
         <h3 className="text-sm font-bold uppercase tracking-widest text-slate-400">Current Address</h3>
-        <Input name="personal.currentAddress" label="Street Address" placeholder="123 Logistics Way" />
+        <Input name="personal.currentAddress" label="Street Address" placeholder="123 Logistics Way" required />
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <Input name="personal.city" label="City" className="md:col-span-2" />
-          <Input name="personal.state" label="State/Province" />
-          <Input name="personal.zip" label="Zip/Postal Code" />
+          <Input name="personal.city" label="City" className="md:col-span-2" required />
+          <Input name="personal.state" label={stateLabel(personalCountry)} required />
+          <Input name="personal.zip" label={zipLabel(personalCountry)} required />
         </div>
         <Select name="personal.country" label="Country" options={[
           { label: 'USA', value: 'USA' },
@@ -102,8 +138,8 @@ export function PersonalInfo() {
               <Input name={`personal.previousAddresses.${index}.address`} label="Street Address" />
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <Input name={`personal.previousAddresses.${index}.city`} label="City" className="md:col-span-1" />
-                <Input name={`personal.previousAddresses.${index}.state`} label="State/Prov" />
-                <Input name={`personal.previousAddresses.${index}.zip`} label="Zip/Postal" />
+                <Input name={`personal.previousAddresses.${index}.state`} label={stateLabel(prevAddresses[index]?.country)} />
+                <Input name={`personal.previousAddresses.${index}.zip`} label={zipLabel(prevAddresses[index]?.country)} />
                 <Select name={`personal.previousAddresses.${index}.country`} label="Country" options={[{label:'USA', value:'USA'}, {label:'Canada', value:'Canada'}]} />
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -158,12 +194,23 @@ export function GeneralInformation() {
       <div className="space-y-4">
         <RadioGroup name="general.workedHereBefore" label="Have you ever worked for this company before?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
         {workedHereBefore === 'Yes' && (
-          <Input name="general.previousWorkDetails" label="Enter start/end dates, location, position, and reason for leaving" placeholder="Dates: 2020-2022, Location: Chicago, Position: Driver, Reason: Relocation" />
+          <div className="space-y-4 p-4 bg-slate-50 dark:bg-slate-800/30 rounded-2xl border border-slate-100 dark:border-slate-800">
+            <div className="grid grid-cols-2 gap-4">
+              <Input name="general.previousWork.startDate" label="Start Date" type="date" />
+              <Input name="general.previousWork.endDate" label="End Date" type="date" />
+            </div>
+            <Input name="general.previousWork.location" label="Location" placeholder="e.g., Chicago, IL" />
+            <Input name="general.previousWork.position" label="Position Held" placeholder="e.g., Long Haul Driver" />
+            <Input name="general.previousWork.reasonForLeaving" label="Reason for Leaving" placeholder="e.g., Relocation" />
+          </div>
         )}
       </div>
 
       <div className="space-y-4">
-        <RadioGroup name="general.hasTwic" label="Do you have a current TWIC card?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
+        <div className="space-y-1">
+          <RadioGroup name="general.hasTwic" label="Do you have a current TWIC card?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
+          <p className="text-xs text-slate-500 dark:text-slate-400 ml-1">Transportation Worker Identification Credential — required for port and secure facility access. Many drivers do not have one.</p>
+        </div>
         {hasTwic === 'Yes' && (
           <Input name="general.twicExpiration" label="TWIC Expiration Date" type="date" />
         )}

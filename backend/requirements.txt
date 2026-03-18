@@ -5,4 +5,3 @@ reportlab>=4.1.0
 python-multipart>=0.0.9
 sqlalchemy>=2.0.25
 psycopg2-binary>=2.9.9
-cloud-sql-python-connector[pg8000]>=1.7.0

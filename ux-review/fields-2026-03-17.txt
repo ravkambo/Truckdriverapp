@@ -1,0 +1,257 @@
+FORM FIELD COUNT ANALYSIS — TRUCKDRIVERAPP
+==========================================
+Date: 2026-03-17
+
+===========================================
+STATIC FIELDS (always visible)
+===========================================
+
+STEP 1 — Personal Information (24 fields)
+------------------------------------------
+ 1.  First Name
+ 2.  Middle Name
+ 3.  Last Name
+ 4.  Suffix
+ 5.  Email Address
+ 6.  Phone Number
+ 7.  Preferred Contact Method
+ 8.  Best Time to Contact
+ 9.  SSN / SIN
+10.  Date of Birth
+11.  Street Address (current)
+12.  City (current)
+13.  State / Province (current)
+14.  Zip / Postal Code (current)
+15.  Country (current)
+16.  Lived at address 3+ years? (RadioGroup)
+17.  Privacy Agreement (Checkbox)
+
+  Conditional — "No" to residence question:
+  Previous Addresses repeating section (7 fields per entry — see below)
+
+STEP 2 — General Information (17 fields)
+-----------------------------------------
+ 1.  Position applying for
+ 2.  Legally eligible for employment?
+ 3.  Currently employed?
+ 4.  Read, write, speak English?
+ 5.  Worked for this company before?
+ 6.  Do you have a TWIC card?
+ 7.  Known by any other name?
+ 8.  Referred by another driver?
+
+  Conditional — "No" to currently employed:
+  9.  Last employment end date
+
+  Conditional — "Yes" to worked here before:
+  10. Previous work start date
+  11. Previous work end date
+  12. Previous work location
+  13. Previous work position
+  14. Previous work reason for leaving
+
+  Conditional — "Yes" to TWIC:
+  15. TWIC expiration date
+
+  Conditional — "Yes" to other name:
+  16. Other name
+
+  Conditional — "Yes" to referred by driver:
+  17. Referring driver's name
+
+STEP 3 — Driving Experience (25 fields)
+-----------------------------------------
+  12 equipment/load types, each with:
+   - Has Experience? (RadioGroup)
+   - Conditional: Years of Experience (Select when "Yes")
+
+  Types: Straight Truck, Tractor Semi, Tractor Two Trailers,
+         Flatbed, Hazmat, Dryvan, Reefer, Tanker, Lumber,
+         Cross-Border Canada/USA, Cross-Border USA/Mexico,
+         Bonded Loads
+
+  25. Others / specialized experience (free text)
+
+STEP 4 — License Details
+  (see repeating section below — 9 fields per license)
+
+STEP 5 — Military & Employment History
+  Military (1 static + 6 conditional):
+   1. Ever in the military?
+   Conditional — "Yes":
+   2.  Country
+   3.  Branch of Service
+   4.  Start Date
+   5.  End Date
+   6.  Rank at Discharge
+   7.  Can you obtain your DD214?
+
+  Employment: see repeating section below (15 fields per employer)
+
+STEP 5/6 — Training & Education
+  Training (1 static + 14 conditional):
+   1. Attended a driver training school?
+   Conditional — "Yes":
+   2.  School Name
+   3.  Start Date
+   4.  End Date
+   5.  Address
+   6.  City
+   7.  State / Province
+   8.  Country
+   9.  Telephone
+  10.  Did you graduate?
+  11.  Subject to FMCSR / TC safety regs?
+  12.  Performed safety sensitive functions?
+  13.  Hours of Instruction
+  14.  Skills Trained (checkbox group: 4 options)
+
+  Education (1 static + 10 conditional):
+   1. Attended other school in last 3 years?
+   Conditional — "Yes":
+   2.  School Name
+   3.  Start Date
+   4.  End Date
+   5.  City
+   6.  State / Province
+   7.  Country
+   8.  Telephone
+   9.  What did you study?
+  10.  Graduation Date
+
+  Unemployment (1 static + repeating section):
+   1. Been unemployed in the last 3 years?
+   Conditional — "Yes": Unemployment Periods repeating section (see below)
+
+STEP 7 — FMCSR Compliance (26 fields)
+---------------------------------------
+Static questions:
+ 1.  License/permit ever denied, suspended, or revoked?
+ 2.  Convicted of driving during suspension/revocation?
+ 3.  Convicted of alcohol/substance offense while operating vehicle?
+ 4.  Convicted of possession/sale/transfer of illegal substance on duty?
+ 5.  Convicted of reckless/careless driving?
+ 6.  Tested positive or refused drug/alcohol test?
+ 7.  Had moving violations in past 3 years?
+ 8.  Involved in accidents in past 5 years?
+ 9.  Other details (free text)
+
+  Conditional — "Yes" to violations:
+  Violations repeating section (7 fields per entry — see below)
+
+  Conditional — "Yes" to accidents:
+  Accidents repeating section (10 fields per entry — see below)
+
+STEP 8 — Disclosures & Signature (7 fields)
+---------------------------------------------
+ 1.  FCRA Acknowledgment (Checkbox)
+ 2.  PSP Authorization (Checkbox)
+ 3.  Consumer Report Authorization (Checkbox)
+ 4.  Part 391 Authorization (Checkbox)
+ 5.  Electronic Signature Agreement (Checkbox)
+ 6.  Electronic Signature (Full Name)
+ 7.  Signature Date
+
+STEP 9 — Document Upload
+  (see repeating section below — 2 fields per document)
+
+
+===========================================
+REPEATING SECTIONS (fields per entry)
+===========================================
+
+Previous Addresses — 7 fields per entry
+  1. Street Address
+  2. City
+  3. State / Province
+  4. Zip / Postal Code
+  5. Country
+  6. Start Date
+  7. End Date
+
+Licenses — 9 fields per entry
+  1. License Number
+  2. State / Province
+  3. Country
+  4. License Class
+  5. License Expiration Date
+  6. DOT Medical Card Expiration
+  7. Is this your current license? (Checkbox)
+  8. Is this a CDL? (Checkbox)
+  9. Endorsements (checkbox group: 6 options)
+
+Employers — 15 fields per entry
+  1.  Company Name
+  2.  Start Date
+  3.  End Date
+  4.  Street Address
+  5.  City
+  6.  State / Province
+  7.  Zip / Postal Code
+  8.  Country
+  9.  Telephone
+ 10.  Position Held
+ 11.  Reason for Leaving
+ 12.  Were you terminated?
+ 13.  Is this your current employer?
+ 14.  May we contact this employer?
+ 15.  Did you operate a CMV?
+
+Violations — 7 fields per entry
+  1. Violation Date
+  2. State / Province
+  3. In Commercial Vehicle?
+  4. Charge / Description
+  5. Penalty / Fine (checkbox group: 5 options)
+  6. Fine Amount
+  7. Comments
+
+Accidents — 10 fields per entry
+  1.  Date
+  2.  City
+  3.  State / Province
+  4.  Type of Accident
+  5.  Hazmat?
+  6.  Towed?
+  7.  Commercial vehicle?
+  8.  At Fault?
+  9.  Ticketed?
+ 10.  Detailed Accident Information
+
+Unemployment Periods — 3 fields per entry
+  1. Start Date
+  2. End Date
+  3. Comments
+
+Documents — 2 fields per entry
+  1. Document Type
+  2. Description
+
+
+===========================================
+TOTALS
+===========================================
+
+Static fields (always visible):        99
+  Personal Info:                        24
+  General Info:                         17
+  Driving Experience:                   25
+  FMCSR Compliance:                      9
+  Disclosures & Signature:               7
+  (+ military, training, education,
+   unemployment: conditional, see above)
+
+Repeating sections (fields per entry):
+  Previous Addresses:                    7
+  Licenses:                              9
+  Employers:                            15
+  Violations:                            7
+  Accidents:                            10
+  Unemployment Periods:                  3
+  Documents:                             2
+
+Realistic minimum (1 license, no repeats):   ~120 fields
+Typical applicant (2 licenses, 2 employers,
+  training, 1 violation):               ~165 fields
+Maximum: unbounded (grows with each
+  additional employer, license, violation, etc.)

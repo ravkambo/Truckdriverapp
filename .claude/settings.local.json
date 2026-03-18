@@ -1,7 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "Bash(cd:*)"
+      "Bash(cd:*)",
+      "Bash(npm run:*)",
+      "Bash(grep:*)",
+      "Bash(python -c \":*)",
+      "Bash(pip install:*)"
     ]
   }
 }

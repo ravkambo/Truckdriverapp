@@ -38,7 +38,13 @@ export const GeneralInfoSchema = z.object({
   lastEmploymentEndDate: z.string().optional(),
   englishProficiency: z.enum(['Yes', 'No']),
   workedHereBefore: z.enum(['Yes', 'No']),
-  previousWorkDetails: z.string().optional(),
+  previousWork: z.object({
+    startDate: z.string().optional(),
+    endDate: z.string().optional(),
+    location: z.string().optional(),
+    position: z.string().optional(),
+    reasonForLeaving: z.string().optional(),
+  }).optional(),
   hasTwic: z.enum(['Yes', 'No']),
   twicExpiration: z.string().optional(),
   knownByOtherName: z.enum(['Yes', 'No']),
@@ -188,6 +194,7 @@ export const FMCSRSchema = z.object({
 
 export const DisclosuresSchema = z.object({
   fcraAcknowledgment: z.boolean().refine(v => v === true, 'Required'),
+  pspAcknowledgment: z.boolean().refine(v => v === true, 'Required'),
   consumerReportAuth: z.boolean().refine(v => v === true, 'Required'),
   part391Auth: z.boolean().refine(v => v === true, 'Required'),
 });

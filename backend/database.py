@@ -1,53 +1,21 @@
 import os
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-from google.cloud.sql.connector import Connector, IPTypes
+from sqlalchemy.orm import sessionmaker, declarative_base
 
-# Default to SQLite if DATABASE_URL isn't set (for local dev)
-# For Cloud SQL, we'll use the connector in a custom engine function
-SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./truckdriverapp.db")
-INSTANCE_CONNECTION_NAME = os.getenv("INSTANCE_CONNECTION_NAME") # e.g. project-id:region:instance-id
-DB_USER = os.getenv("DB_USER", "postgres")
-DB_PASS = os.getenv("DB_PASS", "")
-DB_NAME = os.getenv("DB_NAME", "postgres")
+DATABASE_URL = os.getenv("DATABASE_URL")
 
-def get_engine():
-    # If connection name is provided, use the Cloud SQL Connector
-    if INSTANCE_CONNECTION_NAME:
-        connector = Connector()
-
-        def getconn():
-            conn = connector.connect(
-                INSTANCE_CONNECTION_NAME,
-                "pg8000",
-                user=DB_USER,
-                password=DB_PASS,
-                db=DB_NAME,
-                ip_type=IPTypes.PUBLIC  # Or PRIVATE if using VPC
-            )
-            return conn
-
-        return create_engine(
-            "postgresql+pg8000://",
-            creator=getconn,
-        )
-    
-    # Otherwise, fallback to SQLALCHEMY_DATABASE_URL (SQLite or direct Postgres URL)
-    connect_args = {}
-    if SQLALCHEMY_DATABASE_URL.startswith("sqlite"):
-        connect_args = {"check_same_thread": False}
-    
-    return create_engine(
-        SQLALCHEMY_DATABASE_URL, connect_args=connect_args
+if not DATABASE_URL:
+    raise RuntimeError(
+        "DATABASE_URL environment variable is not set. "
+        "Set it to your Supabase connection string:\n"
+        "  postgresql://postgres.[ref]:[password]@aws-0-[region].pooler.supabase.com:6543/postgres"
     )
 
-engine = get_engine()
+engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
 Base = declarative_base()
 
-# Dependency to get the database session
+
 def get_db():
     db = SessionLocal()
     try:

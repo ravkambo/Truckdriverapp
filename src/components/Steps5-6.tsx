@@ -3,10 +3,14 @@ import { Input, Select, RadioGroup, Checkbox } from './FormElements';
 import { Plus, Trash2, Info } from 'lucide-react';
 import { cn } from '../lib/utils';
 
+function stateLabel(country?: string) { return country === 'Canada' ? 'Province' : 'State'; }
+function zipLabel(country?: string) { return country === 'Canada' ? 'Postal Code' : 'Zip Code'; }
+
 export function MilitaryAndEmployment() {
   const { control, watch } = useFormContext();
   const served = watch('military.served');
   const { fields, append, remove } = useFieldArray({ control, name: "employment" });
+  const allEmployments = watch('employment') || [];
 
   return (
     <div className="space-y-8">
@@ -15,7 +19,7 @@ export function MilitaryAndEmployment() {
         <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-2xl flex gap-3 border border-blue-100 dark:border-blue-800">
           <Info className="text-logistics-blue shrink-0" size={20} />
           <p className="text-xs text-blue-800 dark:text-blue-300 leading-relaxed">
-            DOT regulations require us to obtain the names and addresses of all your employers/contractors for the past 3 years. For the 7 years preceding that 3 years, we need the name and address of the employers/contractors for which you were the operator of a commercial motor vehicle.
+            DOT regulations require us to collect up to 10 years of employment history: all employers from the past 3 years, plus any employers where you drove a commercial motor vehicle going back an additional 7 years (10 years total).
           </p>
         </div>
       </div>
@@ -29,7 +33,10 @@ export function MilitaryAndEmployment() {
             <Input name="military.startDate" label="Start Date" type="date" />
             <Input name="military.endDate" label="End Date" type="date" />
             <Input name="military.rankAtDischarge" label="Rank at Discharge" />
-            <RadioGroup name="military.canObtainDD214" label="Can you obtain your DD214?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
+            <div className="space-y-1">
+                <RadioGroup name="military.canObtainDD214" label="Can you obtain your DD214?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
+                <p className="text-xs text-slate-500 dark:text-slate-400 ml-1">DD214 = Certificate of Release or Discharge from Active Duty.</p>
+              </div>
           </div>
         )}
       </div>
@@ -46,6 +53,13 @@ export function MilitaryAndEmployment() {
           </button>
         </div>
 
+        {fields.length === 0 && (
+          <div className="text-center py-12 bg-slate-50 dark:bg-slate-800/30 rounded-3xl border-2 border-dashed border-slate-200 dark:border-slate-700">
+            <p className="text-slate-500 dark:text-slate-400 text-sm">No employers added yet.</p>
+            <p className="text-slate-400 dark:text-slate-500 text-sm mt-1">Tap <strong>"Add Employer"</strong> above to enter your first employer.</p>
+          </div>
+        )}
+
         {fields.map((field, index) => (
           <div key={field.id} className="p-8 bg-slate-50 dark:bg-slate-800/30 rounded-3xl border border-slate-100 dark:border-slate-800 space-y-6">
             <div className="flex justify-between items-center">
@@ -56,27 +70,28 @@ export function MilitaryAndEmployment() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Input name={`employment.${index}.company`} label="Company Name" />
+              <Input name={`employment.${index}.company`} label="Company Name" required />
               <div className="grid grid-cols-2 gap-4">
-                <Input name={`employment.${index}.startDate`} label="Start Date" type="date" />
-                <Input name={`employment.${index}.endDate`} label="End Date" type="date" />
+                <Input name={`employment.${index}.startDate`} label="Start Date" type="date" required />
+                <Input name={`employment.${index}.endDate`} label="End Date" type="date" required />
               </div>
             </div>
 
-            <Input name={`employment.${index}.address`} label="Street Address" />
+            <Input name={`employment.${index}.address`} label="Street Address" required />
+            <p className="text-xs text-slate-500 dark:text-slate-400 -mt-4 ml-1">Approximate address is fine if you don't remember exactly — try searching the company name on Google Maps.</p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <Input name={`employment.${index}.city`} label="City" className="md:col-span-1" />
-              <Input name={`employment.${index}.state`} label="State/Prov" />
-              <Input name={`employment.${index}.zip`} label="Zip/Postal" />
+              <Input name={`employment.${index}.city`} label="City" className="md:col-span-1" required />
+              <Input name={`employment.${index}.state`} label={stateLabel(allEmployments[index]?.country)} required />
+              <Input name={`employment.${index}.zip`} label={zipLabel(allEmployments[index]?.country)} required />
               <Select name={`employment.${index}.country`} label="Country" options={[{label:'USA', value:'USA'}, {label:'Canada', value:'Canada'}]} />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Input name={`employment.${index}.phone`} label="Telephone" />
-              <Input name={`employment.${index}.position`} label="Position Held" />
+              <Input name={`employment.${index}.phone`} label="Telephone" required />
+              <Input name={`employment.${index}.position`} label="Position Held" required />
             </div>
 
-            <Input name={`employment.${index}.reasonForLeaving`} label="Reason for Leaving" />
+            <Input name={`employment.${index}.reasonForLeaving`} label="Reason for Leaving" required />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-slate-200 dark:border-slate-700">
                <RadioGroup name={`employment.${index}.terminated`} label="Were you terminated/discharged/laid off?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
@@ -96,6 +111,8 @@ export function TrainingAndEducation() {
   const attendedTraining = watch('training.attended');
   const attendedOtherSchool = watch('education.attended');
   const isUnemployed = watch('unemployment.unemployed');
+  const trainingCountry = watch('training.country');
+  const educationCountry = watch('education.country');
   const { fields: unempFields, append: appendUnemp, remove: removeUnemp } = useFieldArray({ control, name: "unemployment.periods" });
 
   const TRAINING_SKILLS = ['Border Crossing', 'Log Books', 'Federal Motor Carrier Regulations', 'Hazardous Materials'];
@@ -121,21 +138,23 @@ export function TrainingAndEducation() {
             <Input name="training.address" label="Address" />
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <Input name="training.city" label="City" />
-              <Input name="training.state" label="State/Prov" />
+              <Input name="training.state" label={stateLabel(trainingCountry)} />
               <Select name="training.country" label="Country" options={[{label:'USA', value:'USA'}, {label:'Canada', value:'Canada'}]} />
               <Input name="training.phone" label="Telephone" />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4 border-t border-slate-200 dark:border-slate-700">
                <RadioGroup name="training.graduated" label="Did you graduate?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
-               <RadioGroup name="training.subjectToFMCSR" label="Subject to FMCSR / TC safety regs?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
+               <div className="space-y-1">
+                 <RadioGroup name="training.subjectToFMCSR" label="Subject to FMCSR / TC safety regs?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
+                 <p className="text-xs text-slate-500 dark:text-slate-400 ml-1">FMCSR = Federal Motor Carrier Safety Regulations. TC = Transport Canada.</p>
+               </div>
                <RadioGroup name="training.safetySensitive" label="Performed safety sensitive functions?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
             </div>
-            <div className="grid grid-cols-2 gap-6">
-               <Input name="training.gpa" label="GPA" />
+            <div className="grid grid-cols-1 gap-6">
                <Input name="training.hoursOfInstruction" label="Hours of Instruction" />
             </div>
             <div className="space-y-4">
-              <label className="text-[10px] uppercase tracking-widest font-bold text-slate-400">Skills Trained (Select all that apply)</label>
+              <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Skills Trained (Select all that apply)</label>
               <div className="grid grid-cols-2 gap-4">
                 {TRAINING_SKILLS.map(s => (
                   <label key={s} className="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 cursor-pointer hover:border-logistics-blue transition-all group">
@@ -166,7 +185,7 @@ export function TrainingAndEducation() {
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <Input name="education.city" label="City" />
-              <Input name="education.state" label="State/Prov" />
+              <Input name="education.state" label={stateLabel(educationCountry)} />
               <Select name="education.country" label="Country" options={[{label:'USA', value:'USA'}, {label:'Canada', value:'Canada'}]} />
               <Input name="education.phone" label="Telephone" />
             </div>
@@ -179,7 +198,10 @@ export function TrainingAndEducation() {
       </div>
 
       <div className="space-y-6">
-        <RadioGroup name="unemployment.unemployed" label="Have you been unemployed at any time within the last 3 years?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
+        <div className="space-y-1">
+          <RadioGroup name="unemployment.unemployed" label="Have you been unemployed at any time within the last 3 years?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
+          <p className="text-xs text-slate-500 dark:text-slate-400 ml-1">Required by DOT regulations for all applicants. Gaps between jobs are normal and expected.</p>
+        </div>
         {isUnemployed === 'Yes' && (
           <div className="space-y-4">
             <div className="flex justify-end">

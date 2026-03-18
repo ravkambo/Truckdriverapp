@@ -52,11 +52,11 @@ export function FMCSR() {
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                     <Input name={`fmcsr.violations.${idx}.date`} label="Violation Date" type="date" />
                     <Input name={`fmcsr.violations.${idx}.state`} label="State/Prov" />
-                    <RadioGroup name={`fmcsr.violations.${idx}.isCommercial`} label="In Commercial Vehicle?" options={[{label:'Y', value:'Yes'}, {label:'N', value:'No'}]} />
+                    <RadioGroup name={`fmcsr.violations.${idx}.isCommercial`} label="In Commercial Vehicle?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
                   </div>
                   <Input name={`fmcsr.violations.${idx}.description`} label="Charge / Description" />
                   <div className="space-y-2">
-                    <label className="text-[10px] uppercase tracking-widest font-bold text-slate-400">Penalty / Fine (Check all that apply)</label>
+                    <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Penalty / Fine (Check all that apply)</label>
                     <div className="flex flex-wrap gap-4">
                       {PENALTIES.map(p => (
                          <label key={p} className="flex items-center gap-2 cursor-pointer">
@@ -98,11 +98,11 @@ export function FMCSR() {
                     <Input name={`fmcsr.accidents.${idx}.type`} label="Type of Accident" />
                   </div>
                   <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                    <RadioGroup name={`fmcsr.accidents.${idx}.hazmat`} label="Hazmat?" options={[{label:'Y', value:'Yes'}, {label:'N', value:'No'}]} />
-                    <RadioGroup name={`fmcsr.accidents.${idx}.towed`} label="Towed?" options={[{label:'Y', value:'Yes'}, {label:'N', value:'No'}]} />
-                    <RadioGroup name={`fmcsr.accidents.${idx}.isCommercial`} label="Commercial?" options={[{label:'Y', value:'Yes'}, {label:'N', value:'No'}]} />
-                    <RadioGroup name={`fmcsr.accidents.${idx}.isFault`} label="At Fault?" options={[{label:'Y', value:'Yes'}, {label:'N', value:'No'}]} />
-                    <RadioGroup name={`fmcsr.accidents.${idx}.isTicketed`} label="Ticketed?" options={[{label:'Y', value:'Yes'}, {label:'N', value:'No'}]} />
+                    <RadioGroup name={`fmcsr.accidents.${idx}.hazmat`} label="Hazmat?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
+                    <RadioGroup name={`fmcsr.accidents.${idx}.towed`} label="Towed?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
+                    <RadioGroup name={`fmcsr.accidents.${idx}.isCommercial`} label="Commercial?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
+                    <RadioGroup name={`fmcsr.accidents.${idx}.isFault`} label="At Fault?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
+                    <RadioGroup name={`fmcsr.accidents.${idx}.isTicketed`} label="Ticketed?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
                   </div>
                   <Input name={`fmcsr.accidents.${idx}.details`} label="Detailed Accident Information" placeholder="Describe the accident/incident..." />
                </div>
@@ -138,14 +138,18 @@ export function DisclosuresAndSignature() {
 
         <div className="p-6 bg-slate-50 dark:bg-slate-800/30 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-4">
           <h3 className="font-bold text-sm uppercase tracking-widest text-slate-900 dark:text-white">PSP Authorization</h3>
+          <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            The Pre-Employment Screening Program (PSP) is a Federal Motor Carrier Safety Administration (FMCSA) program that allows carriers to access your safety record, including crash and inspection history. By checking the box below, you authorize this company to request your PSP report.
+          </p>
           <a href="#" className="flex items-center gap-2 text-xs font-bold text-logistics-blue hover:underline">
             <ExternalLink size={14} /> View Pre-Employment Screening Program (PSP) Authorization
           </a>
+          <Checkbox name="disclosures.pspAcknowledgment" label="I authorize the procurement of my PSP report as described above." />
         </div>
 
         <div className="p-6 bg-slate-50 dark:bg-slate-800/30 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-4">
           <h3 className="font-bold text-sm uppercase tracking-widest text-slate-900 dark:text-white">Disclosure for Consumer Reports</h3>
-          <div className="text-[11px] text-slate-500 dark:text-slate-400 max-h-40 overflow-y-auto pr-2 space-y-2 leading-relaxed italic">
+          <div className="text-sm text-slate-600 dark:text-slate-400 space-y-2 leading-relaxed">
             <p>In connection with your application, Cargo Clarity may order one or more consumer report(s) (commonly known as "background reports") from consumer reporting agencies.</p>
             <p>The consumer reports may include information concerning your character, general reputation, personal characteristics, drug and alcohol test results, motor vehicle records, driving records, criminal history, and more.</p>
             <p>I authorize Cargo Clarity to obtain one or more consumer report(s) or investigative consumer report(s) about me. This authorization remains on file as ongoing authorization during my employment or contract period.</p>
@@ -154,8 +158,8 @@ export function DisclosuresAndSignature() {
         </div>
 
         <div className="p-6 bg-slate-50 dark:bg-slate-800/30 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-4">
-          <h3 className="font-bold text-sm uppercase tracking-widest text-slate-900 dark:text-white">49 C.F.R. PART 391.23 AUTHORIZATION</h3>
-          <div className="text-[11px] text-slate-500 dark:text-slate-400 max-h-40 overflow-y-auto pr-2 space-y-2 leading-relaxed italic">
+          <h3 className="font-bold text-sm uppercase tracking-widest text-slate-900 dark:text-white">Safety Performance History Authorization <span className="normal-case font-normal text-slate-400">(49 C.F.R. Part 391.23)</span></h3>
+          <div className="text-sm text-slate-600 dark:text-slate-400 space-y-2 leading-relaxed">
             <p>I authorize my previous employers, contractors, and trucking schools to release to Cargo Clarity my DOT alcohol and controlled substance information and safety performance history for the past three (3) years.</p>
             <p>I understand I have the right to review this information, have errors corrected, and/or attach a rebuttal statement if accuracy cannot be agreed upon.</p>
           </div>
@@ -169,7 +173,7 @@ export function DisclosuresAndSignature() {
           I certify that this application was completed by me, and that all entries on it and information in it are true and complete to the best of my knowledge.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Input name="signature.signatureName" label="Electronic Signature (Type Full Name)" placeholder="Full Legal Name" />
+          <Input name="signature.signatureName" label="Electronic Signature (Type Full Name)" placeholder="Full Legal Name" required />
           <Input name="signature.signatureDate" label="Date" type="date" readOnly />
         </div>
         <Checkbox name="signature.agreedToElectronic" label="I agree that my typed name above constitutes a binding electronic signature, as legally valid as a handwritten signature." />
