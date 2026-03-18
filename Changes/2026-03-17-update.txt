@@ -1,0 +1,204 @@
+DATE: 2026-03-17
+PROJECT: Truckdriverapp
+AUTHOR: Claude (Anthropic)
+=======================================================
+
+SUMMARY
+-------
+Two sessions of work:
+1. Full UX pass — implemented all 19 items from ux-review.txt /
+   ux-actionplan.txt across all form steps.
+2. Database migration — moved backend from SQLite / Cloud SQL to Supabase
+   (PostgreSQL). Tested and confirmed live connection.
+3. Bug fixes — corrected green step icons on load and removed phone number
+   from header.
+
+
+=======================================================
+SESSION 1 — UX IMPROVEMENTS
+=======================================================
+
+FILES MODIFIED
+--------------
+src/components/FormElements.tsx
+  - Label style: text-[10px] uppercase tracking-widest font-bold text-slate-400
+    → text-sm font-semibold text-slate-700 dark:text-slate-300
+  - Error text: text-[10px] → text-xs
+  - Select: added ChevronDown icon for visible dropdown arrow
+  - Input / Select: added optional `required` prop that renders a * indicator
+  - RadioGroup: conditionally renders label (skips render if empty string)
+
+src/components/Steps1-2.tsx
+  - Added useController import for SSNInput component
+  - Added stateLabel() and zipLabel() helpers — return "State/Province" and
+    "Zip/Postal Code" dynamically based on country field value
+  - New SSNInput component: live XXX-XX-XXXX masking, inputMode="numeric",
+    error display, reassurance note below field
+  - required prop added to: firstName, lastName, email, phone, dob,
+    currentAddress, city, state, zip
+  - Dynamic stateLabel / zipLabel for current address (watches country)
+  - Dynamic stateLabel / zipLabel per previousAddresses entry (watches
+    prevAddresses[index]?.country)
+  - TWIC hint text added: "Transportation Worker Identification Credential
+    — required for port and secure facility access."
+  - previousWorkDetails (single free-text) replaced with 5 structured fields:
+    startDate, endDate, location, position, reasonForLeaving
+    (mapped to general.previousWork.*)
+
+src/components/Steps3-4.tsx
+  - Added stateLabel() helper
+  - DrivingExperience: horizontal scroll table replaced with stacked vertical
+    cards; Y/N radio labels changed to Yes/No
+  - LicenseDetails: empty-state guidance added when fields.length === 0
+  - required prop added to: licenseNumber, state, class, expirationDate,
+    dotMedicalExpiration
+  - Dynamic stateLabel(allLicenses[index]?.country) per license entry
+  - X Endorsement hint: "(HazMat + Tanker combo)"
+  - Endorsements label: text-[10px] → text-sm font-semibold
+
+src/components/Steps5-6.tsx
+  - Added stateLabel() and zipLabel() helpers
+  - DOT notice rewritten: "up to 10 years of employment history total"
+  - Employment empty-state guidance added
+  - required prop added to: company, startDate, endDate, address, city,
+    state, zip, phone, position, reasonForLeaving
+  - Dynamic state/zip labels per employment entry
+    (watches allEmployments[index]?.country)
+  - Address hint: "Approximate address is fine if you don't remember exactly
+    — try searching the company name on Google Maps."
+  - GPA field removed from training section
+  - FMCSR/TC hint: "FMCSR = Federal Motor Carrier Safety Regulations.
+    TC = Transport Canada."
+  - DD214 hint: "DD214 = Certificate of Release or Discharge from Active Duty."
+  - Unemployment DOT context: "Required by DOT regulations for all applicants.
+    Gaps between jobs are normal and expected."
+  - Dynamic stateLabel for training and education sections via watched
+    trainingCountry / educationCountry fields
+  - Training skills label: text-[10px] → text-sm font-semibold
+
+src/components/Steps7-8.tsx
+  - PSP section: added explanation paragraph + disclosures.pspAcknowledgment
+    checkbox
+  - Both legal text boxes: removed max-h-40 overflow-y-auto; text style
+    text-[11px] italic → text-sm
+  - 49 C.F.R. section header rewritten to:
+    "Safety Performance History Authorization (49 C.F.R. Part 391.23)"
+  - All Y/N radio labels in violations and accidents changed to Yes/No
+  - Penalties label: text-[10px] → text-sm font-semibold
+  - required added to signature.signatureName
+
+src/components/Step9-Documents.tsx
+  - "Click or drag to upload" → "Tap to upload a file"
+  - File size label: text-[10px] → text-xs
+
+src/App.tsx
+  - STORAGE_KEY = 'truck_driver_app_v1' constant added
+  - showResumePrompt and readyToSave state added
+  - useEffect on mount: checks localStorage, sets showResumePrompt if
+    saved data found
+  - useEffect on [formData, currentStep, readyToSave]: autosaves to
+    localStorage on every change
+  - handleResume(): calls methods.reset(values) and setCurrentStep(step)
+  - handleStartOver(): clears localStorage key
+  - localStorage.removeItem(STORAGE_KEY) called on successful submit
+  - Amber resume banner added between header and main
+  - pspAcknowledgment: false added to disclosures defaultValues
+  - "Download PDF Copy" button added to post-submission success screen
+
+src/types/form.ts
+  - GeneralInfoSchema: replaced previousWorkDetails: z.string().optional()
+    with previousWork: z.object({ startDate, endDate, location, position,
+    reasonForLeaving }).optional()
+  - DisclosuresSchema: added pspAcknowledgment: z.boolean().refine(
+    v => v === true, 'Required')
+
+
+FILES CREATED
+-------------
+ux-review/fields-2026-03-17.txt
+  - Full field count analysis of the application form
+  - 99 static fields documented across all steps
+  - All repeating sections documented with per-entry field counts
+  - Totals: ~120 fields minimum, ~165 typical, unbounded maximum
+
+
+=======================================================
+SESSION 2 — DATABASE MIGRATION TO SUPABASE
+=======================================================
+
+FILES MODIFIED
+--------------
+backend/database.py
+  - Removed SQLite / Cloud SQL connector logic
+  - Now reads DATABASE_URL from environment variable
+  - Raises RuntimeError on startup if DATABASE_URL is not set
+  - Standard SQLAlchemy create_engine() with psycopg2 driver
+
+backend/models.py
+  - raw_data column: Column(Text) → Column(JSONB)
+    (uses sqlalchemy.dialects.postgresql.JSONB)
+  - id column: Column(Integer) → Column(BigInteger)
+  - Removed unused imports
+
+backend/main.py
+  - Removed import json
+  - raw_data=json.dumps(data.dict()) → raw_data=data.dict()
+    (JSONB column accepts dict directly)
+
+backend/requirements.txt
+  - Removed: cloud-sql-python-connector[pg8000]>=1.7.0
+
+
+FILES CREATED
+-------------
+supabase/schema.sql
+  - CREATE TABLE applications with columns:
+      id          BIGSERIAL PRIMARY KEY
+      first_name  TEXT NOT NULL DEFAULT ''
+      last_name   TEXT NOT NULL DEFAULT ''
+      email       TEXT NOT NULL DEFAULT ''
+      phone       TEXT NOT NULL DEFAULT ''
+      status      TEXT NOT NULL DEFAULT 'Pending'
+      pdf_path    TEXT
+      raw_data    JSONB NOT NULL DEFAULT '{}'
+      created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  - Indexes on: email, last_name, status, created_at DESC
+  - Row Level Security enabled
+
+backend/.env
+  - DATABASE_URL set to Supabase session pooler connection string
+  - Not committed to version control
+
+backend/.env.example
+  - Template showing expected DATABASE_URL format with placeholder values
+
+
+CONNECTION TEST RESULT
+----------------------
+  PostgreSQL 17.6 on aarch64-unknown-linux-gnu, compiled by gcc 15.2.0
+  Host: aws-0-us-west-2.pooler.supabase.com (Supabase, US West)
+  Status: CONNECTED — applications table confirmed present with all 9 columns
+
+
+=======================================================
+SESSION 3 — BUG FIXES (POST-DEPLOY)
+=======================================================
+
+BUGS FIXED
+----------
+src/App.tsx
+
+  1. Step icons incorrectly showing green on initial load (steps 2, 3, 5, 6, 7)
+     Root cause: stepCompletion used schema.safeParse() against form default
+     values. Steps with mostly optional fields passed validation immediately,
+     making their sidebar icons appear completed (green) before the user
+     interacted with them.
+     Fix: replaced entire stepCompletion logic with index < currentStep.
+     Steps now show as completed only after the user has moved past them.
+
+  2. Phone number displayed in header top-right
+     Fix: removed <a href="tel:6477662660"> link and Phone icon.
+     Removed unused Phone import from lucide-react.
+     Removed unused schema imports (MilitaryServiceSchema, EmploymentSchema,
+     DriverTrainingSchoolSchema, OtherEducationSchema, UnemploymentSchema)
+     that were only referenced in the old stepCompletion logic.
