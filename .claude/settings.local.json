@@ -8,7 +8,8 @@
       "Bash(pip install:*)",
       "Bash(vercel --version)",
       "Bash(vercel whoami:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(DATABASE_URL=\"postgresql://postgres.vqawxxrsaezcfhzbiqmt:350609Akinari%24@aws-0-us-west-2.pooler.supabase.com:5432/postgres\" python -c \":*)"
     ]
   }
 }

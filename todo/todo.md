@@ -13,3 +13,5 @@
 ### 3. Certification and Signature — Fix
 - The certification and signature section needs to be reviewed and corrected.
 - Details TBD — confirm expected behavior and required fields with stakeholders.
+
+### 4. USE OCR to scan any existing applications. 
