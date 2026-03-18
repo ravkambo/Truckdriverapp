@@ -1,0 +1,238 @@
+{
+  "personal": {
+    "firstName": "Patricia",
+    "middleName": "Anh",
+    "lastName": "Nguyen",
+    "suffix": "",
+    "residenceThreeYears": "Yes",
+    "currentAddress": "1144 Cherry Blossom Lane",
+    "city": "Seattle",
+    "state": "WA",
+    "zip": "98101",
+    "country": "USA",
+    "ssn": "589442201",
+    "dob": "1982-09-18",
+    "phone": "206-555-0993",
+    "preferredContact": "Email",
+    "bestTimeToContact": "Anytime",
+    "email": "patricia.nguyen@truckermail.com",
+    "privacyAgreement": true
+  },
+  "general": {
+    "position": "Company Driver",
+    "currentlyEmployed": "Yes",
+    "englishProficiency": "Yes",
+    "workedHereBefore": "No",
+    "hasTwic": "Yes",
+    "twicExpiration": "2028-03-15",
+    "knownByOtherName": "No",
+    "referredByDriver": "No",
+    "eligibleUSA": "Yes",
+    "eligibleCanada": "No"
+  },
+  "experience": {
+    "straightTruck": {
+      "hasExperience": "Yes",
+      "years": "4"
+    },
+    "tractorSemi": {
+      "hasExperience": "Yes",
+      "years": "15"
+    },
+    "tractorTwoTrailers": {
+      "hasExperience": "Yes",
+      "years": "10"
+    },
+    "flatbed": {
+      "hasExperience": "Yes",
+      "years": "8"
+    },
+    "hazmat": {
+      "hasExperience": "Yes",
+      "years": "6"
+    },
+    "dryvan": {
+      "hasExperience": "Yes",
+      "years": "15"
+    },
+    "reefer": {
+      "hasExperience": "Yes",
+      "years": "10"
+    },
+    "tanker": {
+      "hasExperience": "Yes",
+      "years": "5"
+    },
+    "lumber": {
+      "hasExperience": "No"
+    },
+    "crossBorderCanada": {
+      "hasExperience": "Yes",
+      "years": "12"
+    },
+    "crossBorderUSA": {
+      "hasExperience": "Yes",
+      "years": "15"
+    },
+    "bondedLoads": {
+      "hasExperience": "Yes",
+      "years": "8"
+    },
+    "others": "Oversize/overweight loads (3 years), Port container moves (4 years)",
+    "autoTransport": {
+      "hasExperience": "No"
+    }
+  },
+  "licenses": [
+    {
+      "licenseNumber": "WA-CDL-9920134",
+      "state": "WA",
+      "country": "USA",
+      "class": "A",
+      "expirationDate": "2029-09-18",
+      "dotMedicalExpiration": "2027-04-01",
+      "isCurrent": true,
+      "isCDL": true,
+      "endorsements": [
+        "H",
+        "N",
+        "T",
+        "P",
+        "X"
+      ]
+    }
+  ],
+  "military": {
+    "served": "Yes",
+    "country": "USA",
+    "branch": "Air Force",
+    "startDate": "2001-07-01",
+    "endDate": "2009-06-30",
+    "rankAtDischarge": "Staff Sergeant (E-5)",
+    "canObtainDD214": "Yes"
+  },
+  "employment": [
+    {
+      "company": "Cascadia Coast Freight",
+      "startDate": "2015-01-05",
+      "endDate": "2026-03-01",
+      "address": "9500 Port of Seattle Way",
+      "city": "Seattle",
+      "state": "WA",
+      "zip": "98108",
+      "country": "USA",
+      "phone": "206-555-0300",
+      "position": "Lead Driver / Safety Trainer",
+      "reasonForLeaving": "Company acquired by competitor, seeking fresh start",
+      "terminated": "No",
+      "isCurrent": "Yes",
+      "mayContact": "Yes",
+      "operatedCMV": "Yes",
+      "subjectToFMCSR": "Yes",
+      "safetySensitiveFunction": "Yes"
+    },
+    {
+      "company": "Northern Pacific Logistics",
+      "startDate": "2010-03-01",
+      "endDate": "2014-12-15",
+      "address": "4400 Eastside Industrial Park",
+      "city": "Tacoma",
+      "state": "WA",
+      "zip": "98421",
+      "country": "USA",
+      "phone": "253-555-0718",
+      "position": "Long-Haul Driver",
+      "reasonForLeaving": "Better salary and benefits at Cascadia",
+      "terminated": "No",
+      "isCurrent": "No",
+      "mayContact": "Yes",
+      "operatedCMV": "Yes",
+      "subjectToFMCSR": "Yes",
+      "safetySensitiveFunction": "Yes"
+    },
+    {
+      "company": "Pacific Rim Carriers (Canada)",
+      "startDate": "2009-09-01",
+      "endDate": "2010-02-28",
+      "address": "1020 Marine Drive",
+      "city": "Vancouver",
+      "state": "BC",
+      "zip": "V6P 5Z1",
+      "country": "Canada",
+      "phone": "604-555-0421",
+      "position": "Cross-Border Driver",
+      "reasonForLeaving": "Preferred US operations",
+      "terminated": "No",
+      "isCurrent": "No",
+      "mayContact": "Yes",
+      "operatedCMV": "Yes",
+      "subjectToFMCSR": "Yes",
+      "safetySensitiveFunction": "Yes"
+    }
+  ],
+  "training": {
+    "attended": "Yes",
+    "schoolName": "Washington State CDL Institute",
+    "startDate": "2009-06-15",
+    "endDate": "2009-08-30",
+    "state": "WA",
+    "address": "7200 Pacific Ave",
+    "city": "Tacoma",
+    "country": "USA",
+    "phone": "253-555-0050",
+    "graduated": "Yes",
+    "subjectToFMCSR": "Yes",
+    "safetySensitive": "Yes",
+    "gpa": "4.0",
+    "hoursOfInstruction": "400",
+    "skillsTrained": [
+      "Pre-trip inspection",
+      "Hazmat handling",
+      "Tanker operations",
+      "Doubles/triples",
+      "Passenger transport",
+      "Defensive driving",
+      "Trip planning",
+      "Log books",
+      "Safety protocols"
+    ]
+  },
+  "education": {
+    "attended": "Yes",
+    "schoolName": "University of Washington",
+    "startDate": "1999-09-01",
+    "endDate": "2001-05-15",
+    "city": "Seattle",
+    "state": "WA",
+    "country": "USA",
+    "phone": "206-555-0800",
+    "studyField": "Logistics and Supply Chain Management",
+    "graduationDate": ""
+  },
+  "unemployment": {
+    "unemployed": "No"
+  },
+  "fmcsr": {
+    "deniedSuspended": "No",
+    "convictedSuspension": "No",
+    "convictedAlcohol": "No",
+    "convictedPossession": "No",
+    "convictedReckless": "No",
+    "drugTestPositiveRefused": "No",
+    "hasViolations": "No",
+    "hasAccidents": "No",
+    "otherDetails": "15+ year clean commercial driving record. OSHA forklift certified. Winner of Cascadia 2022 Safe Driver Award (500,000 miles without incident)."
+  },
+  "documents": [],
+  "disclosures": {
+    "fcraAcknowledgment": true,
+    "pspAcknowledgment": true,
+    "consumerReportAuth": true,
+    "part391Auth": true
+  },
+  "signature": {
+    "signatureName": "Patricia Anh Nguyen",
+    "signatureDate": "2026-03-18",
+    "agreedToElectronic": true
+  }
+}

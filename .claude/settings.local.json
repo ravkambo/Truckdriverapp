@@ -9,7 +9,8 @@
       "Bash(vercel --version)",
       "Bash(vercel whoami:*)",
       "Bash(curl:*)",
-      "Bash(DATABASE_URL=\"postgresql://postgres.vqawxxrsaezcfhzbiqmt:350609Akinari%24@aws-0-us-west-2.pooler.supabase.com:5432/postgres\" python -c \":*)"
+      "Bash(DATABASE_URL=\"postgresql://postgres.vqawxxrsaezcfhzbiqmt:350609Akinari%24@aws-0-us-west-2.pooler.supabase.com:5432/postgres\" python -c \":*)",
+      "Bash(find /c/Python/Truckdriverapp -type f \\\\\\(-name *.py -o -name *.sql \\\\\\))"
     ]
   }
 }

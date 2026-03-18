@@ -27,14 +27,14 @@ import { DocumentUpload } from './components/Step9-Documents';
 
 const STEPS = [
   { id: 'personal', title: 'Personal Information', icon: UserCheck, schema: PersonalInfoSchema },
+  { id: 'licenses', title: 'License Details', icon: FileText, schema: z.array(LicenseSchema) },
   { id: 'general', title: 'General Information', icon: Briefcase, schema: GeneralInfoSchema },
   { id: 'experience', title: 'Driving Experience', icon: Truck, schema: DrivingExperienceSchema },
-  { id: 'licenses', title: 'License Details', icon: FileText, schema: z.array(LicenseSchema) },
-  { id: 'employment', title: 'Employment History', icon: History, schema: z.any() }, // Combined military/employment/training/education/unemployment
+  { id: 'employment', title: 'Employment History', icon: History, schema: z.any() },
+  { id: 'training', title: 'Training & Education', icon: GraduationCap, schema: z.any() },
   { id: 'fmcsr', title: 'FMCSR Compliance', icon: AlertTriangle, schema: FMCSRSchema },
   { id: 'documents', title: 'Document Upload', icon: FileText, schema: z.array(DocumentSchema).optional() },
-  { id: 'disclosures', title: 'Consent & Disclosures', icon: ShieldCheck, schema: DisclosuresSchema },
-  { id: 'signature', title: 'Certification & Signature', icon: CheckCircle2, schema: SignatureSchema },
+  { id: 'signature', title: 'Consent & Signature', icon: CheckCircle2, schema: z.any() },
 ];
 
 const defaultExp = { hasExperience: 'No' as const, years: '' };
@@ -69,14 +69,14 @@ export default function App() {
     resolver: zodResolver(FullApplicationSchema),
     mode: 'onChange',
     defaultValues: {
-      personal: { residenceThreeYears: 'Yes', country: 'USA', preferredContact: 'Cell Phone', privacyAgreement: false, previousAddresses: [] },
-      general: { position: 'Company Driver', legallyEligible: 'Yes', currentlyEmployed: 'Yes', englishProficiency: 'Yes', workedHereBefore: 'No', hasTwic: 'No', knownByOtherName: 'No', referredByDriver: 'No' },
+      personal: { residenceThreeYears: 'Yes', country: 'USA', preferredContact: 'Email', privacyAgreement: false, previousAddresses: [] },
+      general: { position: 'Company Driver', eligibleUSA: 'Yes', eligibleCanada: 'No', currentlyEmployed: 'Yes', englishProficiency: 'Yes', workedHereBefore: 'No', hasTwic: 'No', knownByOtherName: 'No', referredByDriver: 'No' },
       experience: {
         straightTruck: defaultExp, tractorSemi: defaultExp, tractorTwoTrailers: defaultExp, flatbed: defaultExp,
         hazmat: defaultExp, dryvan: defaultExp, reefer: defaultExp, tanker: defaultExp, lumber: defaultExp,
-        crossBorderCanada: defaultExp, crossBorderUSA: defaultExp, bondedLoads: defaultExp
+        autoTransport: defaultExp, crossBorderCanada: defaultExp, crossBorderUSA: defaultExp, bondedLoads: defaultExp
       },
-      licenses: [{ endorsements: [], isCurrent: true, isCDL: true, country: 'USA' }],
+      licenses: [{ endorsements: [], isCurrent: false, isCDL: false, country: 'USA', licenseNumber: '', state: '', class: '', expirationDate: '', dotMedicalExpiration: '' }],
       military: { served: 'No' },
       employment: [],
       training: { attended: 'No', skillsTrained: [] },
@@ -180,14 +180,14 @@ export default function App() {
   const getFieldsForStep = (step: number) => {
     switch (step) {
       case 0: return ['personal'];
-      case 1: return ['general'];
-      case 2: return ['experience'];
-      case 3: return ['licenses'];
-      case 4: return ['military', 'employment', 'training', 'education', 'unemployment'];
-      case 5: return ['fmcsr'];
-      case 6: return ['documents'];
-      case 7: return ['disclosures'];
-      case 8: return ['signature'];
+      case 1: return ['licenses'];
+      case 2: return ['general'];
+      case 3: return ['experience'];
+      case 4: return ['employment'];
+      case 5: return ['training', 'education', 'unemployment'];
+      case 6: return ['fmcsr'];
+      case 7: return ['documents'];
+      case 8: return ['disclosures', 'signature'];
       default: return [];
     }
   };
@@ -332,13 +332,14 @@ export default function App() {
                   <AnimatePresence mode="wait">
                     <motion.div key={currentStep} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.2 }}>
                       {currentStep === 0 && <PersonalInfo />}
-                      {currentStep === 1 && <GeneralInformation />}
-                      {currentStep === 2 && <DrivingExperience />}
-                      {currentStep === 3 && <LicenseDetails />}
+                      {currentStep === 1 && <LicenseDetails />}
+                      {currentStep === 2 && <GeneralInformation />}
+                      {currentStep === 3 && <DrivingExperience />}
                       {currentStep === 4 && <MilitaryAndEmployment />}
-                      {currentStep === 5 && <FMCSR />}
-                      {currentStep === 6 && <DocumentUpload />}
-                      {currentStep === 7 && <DisclosuresAndSignature />}
+                      {currentStep === 5 && <TrainingAndEducation />}
+                      {currentStep === 6 && <FMCSR />}
+                      {currentStep === 7 && <DocumentUpload />}
+                      {currentStep === 8 && <DisclosuresAndSignature />}
                     </motion.div>
                   </AnimatePresence>
                 </div>

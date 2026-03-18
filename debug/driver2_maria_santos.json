@@ -1,0 +1,247 @@
+{
+  "personal": {
+    "firstName": "Maria",
+    "middleName": "Elena",
+    "lastName": "Santos",
+    "suffix": "",
+    "residenceThreeYears": "No",
+    "previousAddresses": [
+      {
+        "address": "901 Riverside Ave Apt 4B",
+        "city": "El Paso",
+        "state": "TX",
+        "zip": "79901",
+        "country": "USA",
+        "startDate": "2020-04-01",
+        "endDate": "2023-09-30"
+      }
+    ],
+    "currentAddress": "2285 Sunset Blvd Unit 12",
+    "city": "San Antonio",
+    "state": "TX",
+    "zip": "78201",
+    "country": "USA",
+    "ssn": "634215509",
+    "dob": "1990-11-03",
+    "phone": "210-555-0876",
+    "preferredContact": "Email",
+    "bestTimeToContact": "Afternoons",
+    "email": "maria.santos@gmail.com",
+    "privacyAgreement": true
+  },
+  "general": {
+    "position": "Owner-Operator",
+    "currentlyEmployed": "No",
+    "lastEmploymentEndDate": "2025-12-31",
+    "englishProficiency": "Yes",
+    "workedHereBefore": "No",
+    "hasTwic": "No",
+    "knownByOtherName": "Yes",
+    "otherName": "Maria Gutierrez",
+    "referredByDriver": "Yes",
+    "referringDriverName": "Carlos Mendoza",
+    "eligibleUSA": "Yes",
+    "eligibleCanada": "No"
+  },
+  "experience": {
+    "straightTruck": {
+      "hasExperience": "Yes",
+      "years": "3"
+    },
+    "tractorSemi": {
+      "hasExperience": "Yes",
+      "years": "7"
+    },
+    "tractorTwoTrailers": {
+      "hasExperience": "No"
+    },
+    "flatbed": {
+      "hasExperience": "No"
+    },
+    "hazmat": {
+      "hasExperience": "No"
+    },
+    "dryvan": {
+      "hasExperience": "Yes",
+      "years": "7"
+    },
+    "reefer": {
+      "hasExperience": "Yes",
+      "years": "5"
+    },
+    "tanker": {
+      "hasExperience": "No"
+    },
+    "lumber": {
+      "hasExperience": "No"
+    },
+    "crossBorderCanada": {
+      "hasExperience": "No"
+    },
+    "crossBorderUSA": {
+      "hasExperience": "Yes",
+      "years": "7"
+    },
+    "bondedLoads": {
+      "hasExperience": "No"
+    },
+    "others": "",
+    "autoTransport": {
+      "hasExperience": "No"
+    }
+  },
+  "licenses": [
+    {
+      "licenseNumber": "TX-CDL-3349917",
+      "state": "TX",
+      "country": "USA",
+      "class": "A",
+      "expirationDate": "2027-11-03",
+      "dotMedicalExpiration": "2025-12-15",
+      "isCurrent": true,
+      "isCDL": true,
+      "endorsements": [
+        "N"
+      ]
+    }
+  ],
+  "military": {
+    "served": "No"
+  },
+  "employment": [
+    {
+      "company": "Lone Star Logistics LLC",
+      "startDate": "2022-02-14",
+      "endDate": "2025-12-31",
+      "address": "6700 Freight Way",
+      "city": "San Antonio",
+      "state": "TX",
+      "zip": "78219",
+      "country": "USA",
+      "phone": "210-555-0500",
+      "position": "Regional Driver",
+      "reasonForLeaving": "Started own trucking operation",
+      "terminated": "No",
+      "isCurrent": "No",
+      "mayContact": "Yes",
+      "operatedCMV": "Yes",
+      "subjectToFMCSR": "Yes",
+      "safetySensitiveFunction": "Yes"
+    },
+    {
+      "company": "Southwest Delivery Partners",
+      "startDate": "2018-07-01",
+      "endDate": "2022-01-31",
+      "address": "450 Distribution Lane",
+      "city": "El Paso",
+      "state": "TX",
+      "zip": "79915",
+      "country": "USA",
+      "phone": "915-555-0233",
+      "position": "Local Driver",
+      "reasonForLeaving": "Better opportunity with Lone Star",
+      "terminated": "No",
+      "isCurrent": "No",
+      "mayContact": "Yes",
+      "operatedCMV": "Yes",
+      "subjectToFMCSR": "Yes",
+      "safetySensitiveFunction": "Yes"
+    }
+  ],
+  "training": {
+    "attended": "Yes",
+    "schoolName": "El Paso Community CDL Training Center",
+    "startDate": "2018-03-01",
+    "endDate": "2018-06-15",
+    "state": "TX",
+    "address": "1100 Montana Ave",
+    "city": "El Paso",
+    "country": "USA",
+    "phone": "915-555-0111",
+    "graduated": "Yes",
+    "subjectToFMCSR": "Yes",
+    "safetySensitive": "Yes",
+    "gpa": "3.5",
+    "hoursOfInstruction": "240",
+    "skillsTrained": [
+      "Backing maneuvers",
+      "City driving",
+      "Log books",
+      "Pre-trip inspection"
+    ]
+  },
+  "education": {
+    "attended": "No"
+  },
+  "unemployment": {
+    "unemployed": "Yes",
+    "periods": [
+      {
+        "startDate": "2026-01-01",
+        "endDate": "2026-03-17",
+        "comments": "Running own trucking operation as independent owner-operator, seeking company contract work"
+      }
+    ]
+  },
+  "fmcsr": {
+    "deniedSuspended": "No",
+    "convictedSuspension": "No",
+    "convictedAlcohol": "No",
+    "convictedPossession": "No",
+    "convictedReckless": "No",
+    "drugTestPositiveRefused": "No",
+    "hasViolations": "Yes",
+    "violations": [
+      {
+        "date": "2021-05-10",
+        "description": "Following too closely on I-10",
+        "state": "TX",
+        "isCommercial": "Yes",
+        "penalties": [
+          "Fine",
+          "Points"
+        ],
+        "fineAmount": "210",
+        "comments": "Paid fine. Completed defensive driving course."
+      },
+      {
+        "date": "2023-11-19",
+        "description": "Failure to obey traffic control device",
+        "state": "NM",
+        "isCommercial": "No",
+        "penalties": [
+          "Fine"
+        ],
+        "fineAmount": "95",
+        "comments": "Missed a stop sign in personal vehicle."
+      }
+    ],
+    "hasAccidents": "Yes",
+    "accidents": [
+      {
+        "date": "2021-05-10",
+        "type": "Rear-end collision",
+        "hazmat": "No",
+        "towed": "No",
+        "city": "Las Cruces",
+        "state": "NM",
+        "isCommercial": "Yes",
+        "isFault": "Yes",
+        "isTicketed": "Yes",
+        "details": "Minor rear-end during congested traffic on I-25. No injuries. Minor vehicle damage. Other driver declined medical attention."
+      }
+    ]
+  },
+  "documents": [],
+  "disclosures": {
+    "fcraAcknowledgment": true,
+    "pspAcknowledgment": true,
+    "consumerReportAuth": true,
+    "part391Auth": true
+  },
+  "signature": {
+    "signatureName": "Maria Elena Santos",
+    "signatureDate": "2026-03-18",
+    "agreedToElectronic": true
+  }
+}

@@ -1,0 +1,160 @@
+Date: 2026-03-18
+Author: Claude (claude-sonnet-4-6)
+Description: UI/UX updates and bug fixes across form sections 1–5, plus step reordering.
+
+================================================================================
+SECTION 1 – Personal Information
+================================================================================
+
+- Preferred Contact Method: Removed "Cell Phone" and "Home Phone" options.
+  Now only "Email" and "Phone" are available.
+
+- SSN / SIN Field: Removed automatic dash formatting entirely. Field now accepts
+  raw digits only (max 9). Label dynamically switches between
+  "Social Security Number (SSN)" and "Social Insurance Number (SIN)"
+  based on the selected country.
+
+- Current Address: Moved the Country dropdown to the top of the address block
+  so that the State/Province and Zip/Postal Code labels update immediately
+  based on region selection (USA vs Canada).
+
+================================================================================
+SECTION 2 – General Information
+================================================================================
+
+- Work Eligibility: Split the single "Are you legally eligible for employment
+  in the United States or Canada?" question into two separate questions:
+    1. "Are you legally eligible to work in the United States?"
+    2. "Are you legally eligible to work in Canada?"
+  Schema fields changed from legallyEligible to eligibleUSA + eligibleCanada.
+
+================================================================================
+SECTION 3 – Driving Experience
+================================================================================
+
+- Added "Auto Transport" as a new experience category.
+
+- Replaced the year-of-experience dropdown with two number input fields
+  per category (when driver selects Yes):
+    - Years of Experience (integer)
+    - Approximate Miles Driven (integer)
+
+- Added an "Additional Information" text input below the number fields
+  for each experience category.
+
+- Removed the dropdown select for year selection entirely.
+
+================================================================================
+SECTION 4 – License Details
+================================================================================
+
+- Renamed "DOT Med Card Expiration" to "Medical Certificate Expiration".
+
+- "Is this your current driver's license?" now defaults to false (unchecked)
+  to avoid confusion when adding multiple licenses.
+
+- "Is this a commercial driver license?" now defaults to false (unchecked)
+  for the same reason.
+
+================================================================================
+SECTION 5 – Employment History
+================================================================================
+
+- Title changed from "Military & Employment History" to "Employment History".
+
+- Info banner color changed from blue to amber/orange for better visibility.
+
+- Updated banner text to include:
+    - "Include any military experience."
+    - "Please start from your most recent employer."
+
+- Removed the standalone military service question from this section
+  (drivers should enter military service as an employment record instead).
+
+- Updated question label:
+    "May we contact this employer at this time?"
+    -> "May we contact this employer for employment verification?"
+
+- Added two new Yes/No questions per employment record:
+    1. "While employed here, were you subject to the Federal Motor Carrier
+       Safety Regulations?"
+    2. "Was the job designated as a safety-sensitive function in any
+       Department of Transportation-regulated mode subject to alcohol and
+       controlled substances testing as required by 49 CFR Part 40?"
+
+  Schema fields added to EmploymentSchema: subjectToFMCSR, safetySensitiveFunction.
+
+================================================================================
+BUG FIXES
+================================================================================
+
+- Training & Education section was never rendered (hidden). Fixed by making
+  it its own dedicated step (Step 6) in the form flow.
+
+- Continue button on the Employment step was failing validation because the
+  step was attempting to validate training/education/unemployment fields that
+  were not visible to the user. Fixed by moving those fields to their own
+  step with their own validation trigger.
+
+- The final step (Certification & Signature) was rendering a blank screen
+  because the STEPS array had a separate "signature" entry that pointed to
+  no component. Fixed by merging Consent & Signature into a single final step
+  backed by the existing DisclosuresAndSignature component.
+
+================================================================================
+STEP ORDER (New)
+================================================================================
+
+  Step 01 – Personal Information
+  Step 02 – License Details
+  Step 03 – General Information
+  Step 04 – Driving Experience
+  Step 05 – Employment History
+  Step 06 – Training & Education
+  Step 07 – FMCSR Compliance
+  Step 08 – Document Upload
+  Step 09 – Consent & Signature
+
+================================================================================
+FILES MODIFIED
+================================================================================
+
+  src/types/form.ts
+    - ExperienceRowSchema: added miles, additionalInfo fields
+    - DrivingExperienceSchema: added autoTransport
+    - PersonalInfoSchema: preferredContact enum updated
+    - GeneralInfoSchema: legallyEligible replaced with eligibleUSA + eligibleCanada
+    - EmploymentSchema: added subjectToFMCSR, safetySensitiveFunction
+
+  src/components/Steps1-2.tsx
+    - SSNInput: removed dash formatting, country-reactive label
+    - PersonalInfo: preferredContact options updated, country moved to top of address
+    - GeneralInformation: split eligibility into two questions
+
+  src/components/Steps3-4.tsx
+    - EXP_TYPES: added Auto Transport
+    - DrivingExperience: replaced Select with number inputs, added miles + additionalInfo
+    - LicenseDetails: renamed DOT Med field, fixed checkbox defaults
+
+  src/components/Steps5-6.tsx
+    - MilitaryAndEmployment: title, banner color, instructions, removed military question,
+      updated contact label, added subjectToFMCSR + safetySensitiveFunction fields
+
+  src/App.tsx
+    - STEPS array reordered and training step added
+    - getFieldsForStep updated to match new step indices
+    - Step render conditions updated
+    - defaultValues updated for preferredContact, eligibleUSA/Canada, autoTransport,
+      license checkbox defaults
+
+  debug/*.json (all 5 driver profiles)
+    - SSN dashes removed
+    - preferredContact values updated
+    - legallyEligible replaced with eligibleUSA + eligibleCanada
+    - autoTransport experience entry added
+    - subjectToFMCSR + safetySensitiveFunction added to all employment records
+
+  debug/PROFILES_REFERENCE.md
+    - SSN values updated (no dashes)
+    - Preferred contact values updated
+    - Eligibility fields updated

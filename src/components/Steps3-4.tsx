@@ -11,10 +11,11 @@ const EXP_TYPES = [
   { id: 'tractorTwoTrailers', label: 'Tractor - Two Trailers' },
   { id: 'flatbed', label: 'Flatbed' },
   { id: 'hazmat', label: 'Hazmat' },
-  { id: 'dryvan', label: 'Dryvan' },
+  { id: 'dryvan', label: 'Dry Van' },
   { id: 'reefer', label: 'Reefer' },
   { id: 'tanker', label: 'Tanker' },
   { id: 'lumber', label: 'Lumber' },
+  { id: 'autoTransport', label: 'Auto Transport' },
   { id: 'crossBorderCanada', label: 'Cross-Border Canada and USA' },
   { id: 'crossBorderUSA', label: 'Cross-Border USA and Mexico' },
   { id: 'bondedLoads', label: 'Bonded Loads' },
@@ -45,17 +46,25 @@ export function DrivingExperience() {
                 />
               </div>
               {hasExp === 'Yes' && (
-                <div className="mt-3 pt-3 border-t border-slate-200 dark:border-slate-700">
-                  <Select
-                    name={`experience.${type.id}.years`}
-                    label="Years of Experience"
-                    options={[
-                      { label: '1 Year', value: '1' },
-                      { label: '2 Years', value: '2' },
-                      { label: '3 Years', value: '3' },
-                      { label: '4 Years', value: '4' },
-                      { label: '5+ Years', value: '5+' },
-                    ]}
+                <div className="mt-3 pt-3 border-t border-slate-200 dark:border-slate-700 space-y-3">
+                  <div className="grid grid-cols-2 gap-4">
+                    <Input
+                      name={`experience.${type.id}.years`}
+                      label="Years of Experience"
+                      type="number"
+                      placeholder="e.g. 5"
+                    />
+                    <Input
+                      name={`experience.${type.id}.miles`}
+                      label="Approximate Miles Driven"
+                      type="number"
+                      placeholder="e.g. 150000"
+                    />
+                  </div>
+                  <Input
+                    name={`experience.${type.id}.additionalInfo`}
+                    label="Additional Information"
+                    placeholder="Any relevant details about this experience..."
                   />
                 </div>
               )}
@@ -108,7 +117,7 @@ export function LicenseDetails() {
         </div>
         <button
           type="button"
-          onClick={() => append({ endorsements: [], isCurrent: false, isCDL: false, country: 'USA' })}
+          onClick={() => append({ endorsements: [], isCurrent: false, isCDL: false, country: 'USA', licenseNumber: '', state: '', class: '', expirationDate: '', dotMedicalExpiration: '' })}
           className="flex items-center gap-2 text-xs font-bold bg-logistics-blue text-white px-4 py-2 rounded-xl hover:opacity-90 transition-all shadow-lg shadow-logistics-blue/20"
         >
           <Plus size={16} /> Add License
@@ -145,7 +154,7 @@ export function LicenseDetails() {
             <Select name={`licenses.${index}.class`} label="License Class" required options={LICENSE_CLASSES} />
             <div className="grid grid-cols-2 gap-4">
               <Input name={`licenses.${index}.expirationDate`} label="License Expiration" type="date" required />
-              <Input name={`licenses.${index}.dotMedicalExpiration`} label="DOT Med Card Expiration" type="date" required />
+              <Input name={`licenses.${index}.dotMedicalExpiration`} label="Medical Certificate Expiration" type="date" required />
             </div>
           </div>
 

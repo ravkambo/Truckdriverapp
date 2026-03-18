@@ -6,32 +6,28 @@ function stateLabel(country?: string) { return country === 'Canada' ? 'Province'
 function zipLabel(country?: string) { return country === 'Canada' ? 'Postal Code' : 'Zip Code'; }
 
 function SSNInput() {
-  const { control, formState: { errors } } = useFormContext();
+  const { control, watch, formState: { errors } } = useFormContext();
   const { field } = useController({ name: 'personal.ssn', control });
+  const country = watch('personal.country');
+  const isCanada = country === 'Canada';
   const error = (errors as any).personal?.ssn;
-
-  const formatSSN = (value: string) => {
-    const digits = value.replace(/\D/g, '').slice(0, 9);
-    if (digits.length > 5) return `${digits.slice(0,3)}-${digits.slice(3,5)}-${digits.slice(5)}`;
-    if (digits.length > 3) return `${digits.slice(0,3)}-${digits.slice(3)}`;
-    return digits;
-  };
 
   return (
     <div className="space-y-1">
       <label className="text-sm font-semibold text-slate-700 dark:text-slate-300 ml-1">
-        SSN / SIN <span className="text-rose-500">*</span>
+        {isCanada ? 'Social Insurance Number (SIN)' : 'Social Security Number (SSN)'} <span className="text-rose-500">*</span>
       </label>
       <input
         {...field}
-        onChange={(e) => field.onChange(formatSSN(e.target.value))}
+        onChange={(e) => field.onChange(e.target.value.replace(/\D/g, '').slice(0, 9))}
         value={field.value || ''}
-        placeholder="000-00-0000"
+        placeholder={isCanada ? '000000000' : '000000000'}
         inputMode="numeric"
+        maxLength={9}
         className={`w-full bg-slate-50 dark:bg-slate-800/50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-logistics-blue transition-all outline-none${error ? ' ring-2 ring-rose-500' : ''}`}
       />
       {error && <p className="text-xs text-rose-500 font-semibold ml-1">{error.message}</p>}
-      <p className="text-xs text-slate-500 dark:text-slate-400 ml-1">Required for background check. Your data is encrypted and stored securely. (SIN = Canadian Social Insurance Number for Canadian applicants)</p>
+      <p className="text-xs text-slate-500 dark:text-slate-400 ml-1">Required for background check. Your data is encrypted and stored securely.</p>
     </div>
   );
 }
@@ -74,9 +70,8 @@ export function PersonalInfo() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Input name="personal.phone" label="Phone Number" placeholder="(555) 000-0000" required />
         <Select name="personal.preferredContact" label="Preferred Contact Method" options={[
-          { label: 'Cell Phone', value: 'Cell Phone' },
           { label: 'Email', value: 'Email' },
-          { label: 'Home Phone', value: 'Home Phone' },
+          { label: 'Phone', value: 'Phone' },
         ]} />
       </div>
 
@@ -91,16 +86,16 @@ export function PersonalInfo() {
 
       <div className="space-y-6 pt-4 border-t border-slate-100 dark:border-slate-800">
         <h3 className="text-sm font-bold uppercase tracking-widest text-slate-400">Current Address</h3>
+        <Select name="personal.country" label="Country" options={[
+          { label: 'USA', value: 'USA' },
+          { label: 'Canada', value: 'Canada' },
+        ]} />
         <Input name="personal.currentAddress" label="Street Address" placeholder="123 Logistics Way" required />
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <Input name="personal.city" label="City" className="md:col-span-2" required />
           <Input name="personal.state" label={stateLabel(personalCountry)} required />
           <Input name="personal.zip" label={zipLabel(personalCountry)} required />
         </div>
-        <Select name="personal.country" label="Country" options={[
-          { label: 'USA', value: 'USA' },
-          { label: 'Canada', value: 'Canada' },
-        ]} />
       </div>
 
       <div className="pt-4 border-t border-slate-100 dark:border-slate-800">
@@ -180,7 +175,8 @@ export function GeneralInformation() {
         { label: 'Driver for Owner-Operator', value: 'Driver for Owner-Operator' },
       ]} />
 
-      <RadioGroup name="general.legallyEligible" label="Are you legally eligible for employment in the United States or Canada?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
+      <RadioGroup name="general.eligibleUSA" label="Are you legally eligible to work in the United States?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
+      <RadioGroup name="general.eligibleCanada" label="Are you legally eligible to work in Canada?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
 
       <div className="space-y-4">
         <RadioGroup name="general.currentlyEmployed" label="Are you currently employed?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />

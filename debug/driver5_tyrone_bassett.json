@@ -1,0 +1,298 @@
+{
+  "personal": {
+    "firstName": "Tyrone",
+    "middleName": "Marcus",
+    "lastName": "Bassett",
+    "suffix": "",
+    "residenceThreeYears": "No",
+    "previousAddresses": [
+      {
+        "address": "312 Magnolia Street",
+        "city": "Atlanta",
+        "state": "GA",
+        "zip": "30301",
+        "country": "USA",
+        "startDate": "2019-01-01",
+        "endDate": "2022-06-30"
+      },
+      {
+        "address": "55 Peach Tree Rd Apt 7",
+        "city": "Macon",
+        "state": "GA",
+        "zip": "31201",
+        "country": "USA",
+        "startDate": "2015-05-01",
+        "endDate": "2018-12-31"
+      }
+    ],
+    "currentAddress": "700 Crescent Drive",
+    "city": "Charlotte",
+    "state": "NC",
+    "zip": "28201",
+    "country": "USA",
+    "ssn": "301784456",
+    "dob": "1979-07-22",
+    "phone": "704-555-0587",
+    "preferredContact": "Phone",
+    "bestTimeToContact": "Mornings",
+    "email": "tyrone.bassett@drivermail.net",
+    "privacyAgreement": true
+  },
+  "general": {
+    "position": "Company Driver",
+    "currentlyEmployed": "No",
+    "lastEmploymentEndDate": "2025-10-01",
+    "englishProficiency": "Yes",
+    "workedHereBefore": "No",
+    "hasTwic": "No",
+    "knownByOtherName": "No",
+    "referredByDriver": "No",
+    "eligibleUSA": "Yes",
+    "eligibleCanada": "No"
+  },
+  "experience": {
+    "straightTruck": {
+      "hasExperience": "Yes",
+      "years": "3"
+    },
+    "tractorSemi": {
+      "hasExperience": "Yes",
+      "years": "9"
+    },
+    "tractorTwoTrailers": {
+      "hasExperience": "No"
+    },
+    "flatbed": {
+      "hasExperience": "Yes",
+      "years": "3"
+    },
+    "hazmat": {
+      "hasExperience": "No"
+    },
+    "dryvan": {
+      "hasExperience": "Yes",
+      "years": "9"
+    },
+    "reefer": {
+      "hasExperience": "Yes",
+      "years": "4"
+    },
+    "tanker": {
+      "hasExperience": "No"
+    },
+    "lumber": {
+      "hasExperience": "No"
+    },
+    "crossBorderCanada": {
+      "hasExperience": "No"
+    },
+    "crossBorderUSA": {
+      "hasExperience": "Yes",
+      "years": "9"
+    },
+    "bondedLoads": {
+      "hasExperience": "No"
+    },
+    "others": "",
+    "autoTransport": {
+      "hasExperience": "No"
+    }
+  },
+  "licenses": [
+    {
+      "licenseNumber": "NC-CDL-7741820",
+      "state": "NC",
+      "country": "USA",
+      "class": "A",
+      "expirationDate": "2028-07-22",
+      "dotMedicalExpiration": "2026-09-01",
+      "isCurrent": true,
+      "isCDL": true,
+      "endorsements": []
+    }
+  ],
+  "military": {
+    "served": "No"
+  },
+  "employment": [
+    {
+      "company": "Southeastern Cargo Solutions",
+      "startDate": "2021-05-01",
+      "endDate": "2025-10-01",
+      "address": "2200 Airport Industrial Drive",
+      "city": "Charlotte",
+      "state": "NC",
+      "zip": "28208",
+      "country": "USA",
+      "phone": "704-555-0450",
+      "position": "Regional OTR Driver",
+      "reasonForLeaving": "Terminated following safety review",
+      "terminated": "Yes",
+      "isCurrent": "No",
+      "mayContact": "Yes",
+      "operatedCMV": "Yes",
+      "subjectToFMCSR": "Yes",
+      "safetySensitiveFunction": "Yes"
+    },
+    {
+      "company": "Georgia Prime Freight Inc.",
+      "startDate": "2016-08-01",
+      "endDate": "2021-04-15",
+      "address": "3800 Logistics Parkway",
+      "city": "Atlanta",
+      "state": "GA",
+      "zip": "30336",
+      "country": "USA",
+      "phone": "404-555-0900",
+      "position": "Long-Haul Driver",
+      "reasonForLeaving": "Relocated to Charlotte for family",
+      "terminated": "No",
+      "isCurrent": "No",
+      "mayContact": "Yes",
+      "operatedCMV": "Yes",
+      "subjectToFMCSR": "Yes",
+      "safetySensitiveFunction": "Yes"
+    },
+    {
+      "company": "Quick Deliver Inc.",
+      "startDate": "2013-02-01",
+      "endDate": "2016-07-31",
+      "address": "910 Warehouse Row",
+      "city": "Macon",
+      "state": "GA",
+      "zip": "31206",
+      "country": "USA",
+      "phone": "478-555-0155",
+      "position": "Local Driver",
+      "reasonForLeaving": "Better pay at Georgia Prime",
+      "terminated": "No",
+      "isCurrent": "No",
+      "mayContact": "Yes",
+      "operatedCMV": "Yes",
+      "subjectToFMCSR": "Yes",
+      "safetySensitiveFunction": "Yes"
+    }
+  ],
+  "training": {
+    "attended": "Yes",
+    "schoolName": "Macon Technical Institute \u00e2\u20ac\u201c CDL Training",
+    "startDate": "2012-09-01",
+    "endDate": "2012-12-15",
+    "state": "GA",
+    "address": "3300 Northside Drive",
+    "city": "Macon",
+    "country": "USA",
+    "phone": "478-555-0020",
+    "graduated": "Yes",
+    "subjectToFMCSR": "Yes",
+    "safetySensitive": "Yes",
+    "gpa": "2.9",
+    "hoursOfInstruction": "200",
+    "skillsTrained": [
+      "Pre-trip inspection",
+      "Backing maneuvers",
+      "Highway driving",
+      "Log books"
+    ]
+  },
+  "education": {
+    "attended": "No"
+  },
+  "unemployment": {
+    "unemployed": "Yes",
+    "periods": [
+      {
+        "startDate": "2025-10-02",
+        "endDate": "2026-03-18",
+        "comments": "Terminated from previous employer. Completed drug rehabilitation program. Ready to return to work."
+      }
+    ]
+  },
+  "fmcsr": {
+    "deniedSuspended": "Yes",
+    "convictedSuspension": "No",
+    "convictedAlcohol": "No",
+    "convictedPossession": "No",
+    "convictedReckless": "Yes",
+    "drugTestPositiveRefused": "Yes",
+    "hasViolations": "Yes",
+    "violations": [
+      {
+        "date": "2023-04-08",
+        "description": "Reckless driving on I-85",
+        "state": "GA",
+        "isCommercial": "Yes",
+        "penalties": [
+          "Fine",
+          "License suspension \u00e2\u20ac\u201c 30 days",
+          "Mandatory safety course"
+        ],
+        "fineAmount": "850",
+        "comments": "License temporarily suspended. Reinstated after completing required safety program. Fine paid in full."
+      },
+      {
+        "date": "2024-10-22",
+        "description": "Improper lane change \u00e2\u20ac\u201c sideswipe",
+        "state": "NC",
+        "isCommercial": "Yes",
+        "penalties": [
+          "Fine",
+          "Points"
+        ],
+        "fineAmount": "300",
+        "comments": "Minor damage to guardrail. No injuries. Fine paid."
+      },
+      {
+        "date": "2020-06-14",
+        "description": "Running red light \u00e2\u20ac\u201c personal vehicle",
+        "state": "GA",
+        "isCommercial": "No",
+        "penalties": [
+          "Fine"
+        ],
+        "fineAmount": "160",
+        "comments": "Personal vehicle. Fine paid."
+      }
+    ],
+    "hasAccidents": "Yes",
+    "accidents": [
+      {
+        "date": "2023-04-08",
+        "type": "Sideswipe \u00e2\u20ac\u201c guardrail",
+        "hazmat": "No",
+        "towed": "Yes",
+        "city": "Gainesville",
+        "state": "GA",
+        "isCommercial": "Yes",
+        "isFault": "Yes",
+        "isTicketed": "Yes",
+        "details": "Lost control on I-85 during reckless driving incident. Truck towed. No other vehicles involved. No injuries. Post-accident drug test returned positive for marijuana."
+      },
+      {
+        "date": "2024-10-22",
+        "type": "Lane change sideswipe",
+        "hazmat": "No",
+        "towed": "No",
+        "city": "Gastonia",
+        "state": "NC",
+        "isCommercial": "Yes",
+        "isFault": "Yes",
+        "isTicketed": "Yes",
+        "details": "Clipped guardrail during improper lane change on I-85 bypass. Minor vehicle damage. No injuries. Negative drug test."
+      }
+    ],
+    "otherDetails": "Drug test positive (marijuana) following April 2023 accident. Completed SAP (Substance Abuse Professional) program and Return-to-Duty testing in February 2025. All clearances obtained. Terminated by Southeastern Cargo Solutions in October 2025 following annual safety review citing cumulative violations record."
+  },
+  "documents": [],
+  "disclosures": {
+    "fcraAcknowledgment": true,
+    "pspAcknowledgment": true,
+    "consumerReportAuth": true,
+    "part391Auth": true
+  },
+  "signature": {
+    "signatureName": "Tyrone Marcus Bassett",
+    "signatureDate": "2026-03-18",
+    "agreedToElectronic": true
+  }
+}

@@ -1,0 +1,225 @@
+{
+  "personal": {
+    "firstName": "Derek",
+    "middleName": "",
+    "lastName": "O'Connell",
+    "suffix": "Jr.",
+    "residenceThreeYears": "Yes",
+    "currentAddress": "88 Pinewood Court",
+    "city": "Boise",
+    "state": "ID",
+    "zip": "83701",
+    "country": "USA",
+    "ssn": "478563311",
+    "dob": "1985-03-27",
+    "phone": "208-555-0341",
+    "preferredContact": "Phone",
+    "bestTimeToContact": "Evenings",
+    "email": "derek.oconnell@outlook.com",
+    "privacyAgreement": true
+  },
+  "general": {
+    "position": "Driver for Owner-Operator",
+    "currentlyEmployed": "No",
+    "lastEmploymentEndDate": "2026-01-15",
+    "englishProficiency": "Yes",
+    "workedHereBefore": "No",
+    "hasTwic": "No",
+    "knownByOtherName": "No",
+    "referredByDriver": "No",
+    "eligibleUSA": "Yes",
+    "eligibleCanada": "No"
+  },
+  "experience": {
+    "straightTruck": {
+      "hasExperience": "Yes",
+      "years": "2"
+    },
+    "tractorSemi": {
+      "hasExperience": "Yes",
+      "years": "4"
+    },
+    "tractorTwoTrailers": {
+      "hasExperience": "No"
+    },
+    "flatbed": {
+      "hasExperience": "Yes",
+      "years": "2"
+    },
+    "hazmat": {
+      "hasExperience": "No"
+    },
+    "dryvan": {
+      "hasExperience": "Yes",
+      "years": "4"
+    },
+    "reefer": {
+      "hasExperience": "No"
+    },
+    "tanker": {
+      "hasExperience": "No"
+    },
+    "lumber": {
+      "hasExperience": "Yes",
+      "years": "1"
+    },
+    "crossBorderCanada": {
+      "hasExperience": "No"
+    },
+    "crossBorderUSA": {
+      "hasExperience": "Yes",
+      "years": "4"
+    },
+    "bondedLoads": {
+      "hasExperience": "No"
+    },
+    "others": "",
+    "autoTransport": {
+      "hasExperience": "No"
+    }
+  },
+  "licenses": [
+    {
+      "licenseNumber": "ID-CDL-5512938",
+      "state": "ID",
+      "country": "USA",
+      "class": "A",
+      "expirationDate": "2027-03-27",
+      "dotMedicalExpiration": "2026-11-30",
+      "isCurrent": true,
+      "isCDL": true,
+      "endorsements": []
+    },
+    {
+      "licenseNumber": "OR-DL-7729041",
+      "state": "OR",
+      "country": "USA",
+      "class": "B",
+      "expirationDate": "2024-01-10",
+      "dotMedicalExpiration": "2023-09-01",
+      "isCurrent": false,
+      "isCDL": false,
+      "endorsements": []
+    }
+  ],
+  "military": {
+    "served": "Yes",
+    "country": "USA",
+    "branch": "Army",
+    "startDate": "2004-06-01",
+    "endDate": "2008-05-31",
+    "rankAtDischarge": "Specialist (E-4)",
+    "canObtainDD214": "Yes"
+  },
+  "employment": [
+    {
+      "company": "Pacific Northwest Carriers",
+      "startDate": "2022-04-01",
+      "endDate": "2026-01-15",
+      "address": "3310 Freight Terminal Blvd",
+      "city": "Portland",
+      "state": "OR",
+      "zip": "97201",
+      "country": "USA",
+      "phone": "503-555-0670",
+      "position": "CDL Driver",
+      "reasonForLeaving": "Relocated to Idaho for family",
+      "terminated": "No",
+      "isCurrent": "No",
+      "mayContact": "Yes",
+      "operatedCMV": "Yes",
+      "subjectToFMCSR": "Yes",
+      "safetySensitiveFunction": "Yes"
+    },
+    {
+      "company": "Mountain West Haulers",
+      "startDate": "2019-09-01",
+      "endDate": "2022-03-15",
+      "address": "775 Depot Road",
+      "city": "Boise",
+      "state": "ID",
+      "zip": "83704",
+      "country": "USA",
+      "phone": "208-555-0812",
+      "position": "Local Delivery Driver",
+      "reasonForLeaving": "Promotion opportunity at Pacific Northwest",
+      "terminated": "No",
+      "isCurrent": "No",
+      "mayContact": "Yes",
+      "operatedCMV": "Yes",
+      "subjectToFMCSR": "Yes",
+      "safetySensitiveFunction": "Yes"
+    }
+  ],
+  "training": {
+    "attended": "Yes",
+    "schoolName": "Boise State Workforce Training \u00e2\u20ac\u201c CDL Program",
+    "startDate": "2019-06-01",
+    "endDate": "2019-08-31",
+    "state": "ID",
+    "address": "1910 University Drive",
+    "city": "Boise",
+    "country": "USA",
+    "phone": "208-555-0020",
+    "graduated": "Yes",
+    "subjectToFMCSR": "Yes",
+    "safetySensitive": "Yes",
+    "gpa": "3.2",
+    "hoursOfInstruction": "200",
+    "skillsTrained": [
+      "Pre-trip inspection",
+      "Flatbed securement",
+      "Mountain driving",
+      "Log books"
+    ]
+  },
+  "education": {
+    "attended": "No"
+  },
+  "unemployment": {
+    "unemployed": "Yes",
+    "periods": [
+      {
+        "startDate": "2026-01-16",
+        "endDate": "2026-03-18",
+        "comments": "Actively seeking CDL employment after family relocation from Oregon to Idaho."
+      }
+    ]
+  },
+  "fmcsr": {
+    "deniedSuspended": "No",
+    "convictedSuspension": "No",
+    "convictedAlcohol": "No",
+    "convictedPossession": "No",
+    "convictedReckless": "No",
+    "drugTestPositiveRefused": "No",
+    "hasViolations": "Yes",
+    "violations": [
+      {
+        "date": "2020-07-15",
+        "description": "Speeding \u00e2\u20ac\u201c 8 mph over limit",
+        "state": "ID",
+        "isCommercial": "No",
+        "penalties": [
+          "Fine"
+        ],
+        "fineAmount": "120",
+        "comments": "Personal vehicle. Fine paid immediately."
+      }
+    ],
+    "hasAccidents": "No",
+    "otherDetails": "Clean commercial driving record. One minor personal vehicle speeding ticket in 2020."
+  },
+  "documents": [],
+  "disclosures": {
+    "fcraAcknowledgment": true,
+    "pspAcknowledgment": true,
+    "consumerReportAuth": true,
+    "part391Auth": true
+  },
+  "signature": {
+    "signatureName": "Derek O'Connell Jr.",
+    "signatureDate": "2026-03-18",
+    "agreedToElectronic": true
+  }
+}

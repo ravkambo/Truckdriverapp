@@ -25,7 +25,7 @@ export const PersonalInfoSchema = z.object({
   ssn: z.string().min(9, 'SSN/SIN is required'),
   dob: z.string().min(10, 'Date of birth is required'),
   phone: z.string().min(7, 'Phone number is required'),
-  preferredContact: z.enum(['Cell Phone', 'Email', 'Home Phone']),
+  preferredContact: z.enum(['Email', 'Phone']),
   bestTimeToContact: z.string().optional(),
   email: z.string().email('Invalid email address'),
   privacyAgreement: z.boolean().refine(v => v === true, 'You must agree to the privacy policy'),
@@ -33,7 +33,8 @@ export const PersonalInfoSchema = z.object({
 
 export const GeneralInfoSchema = z.object({
   position: z.enum(['Company Driver', 'Owner-Operator', 'Driver for Owner-Operator']),
-  legallyEligible: z.enum(['Yes', 'No']),
+  eligibleUSA: z.enum(['Yes', 'No']),
+  eligibleCanada: z.enum(['Yes', 'No']),
   currentlyEmployed: z.enum(['Yes', 'No']),
   lastEmploymentEndDate: z.string().optional(),
   englishProficiency: z.enum(['Yes', 'No']),
@@ -56,6 +57,8 @@ export const GeneralInfoSchema = z.object({
 export const ExperienceRowSchema = z.object({
   hasExperience: z.enum(['Yes', 'No']),
   years: z.string().optional(),
+  miles: z.string().optional(),
+  additionalInfo: z.string().optional(),
 });
 
 export const DrivingExperienceSchema = z.object({
@@ -68,6 +71,7 @@ export const DrivingExperienceSchema = z.object({
   reefer: ExperienceRowSchema,
   tanker: ExperienceRowSchema,
   lumber: ExperienceRowSchema,
+  autoTransport: ExperienceRowSchema,
   crossBorderCanada: ExperienceRowSchema,
   crossBorderUSA: ExperienceRowSchema,
   bondedLoads: ExperienceRowSchema,
@@ -112,6 +116,8 @@ export const EmploymentSchema = z.object({
   isCurrent: z.enum(['Yes', 'No']),
   mayContact: z.enum(['Yes', 'No']),
   operatedCMV: z.enum(['Yes', 'No']),
+  subjectToFMCSR: z.enum(['Yes', 'No']),
+  safetySensitiveFunction: z.enum(['Yes', 'No']),
 });
 
 export const DriverTrainingSchoolSchema = z.object({

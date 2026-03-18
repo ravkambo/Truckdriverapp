@@ -7,46 +7,28 @@ function stateLabel(country?: string) { return country === 'Canada' ? 'Province'
 function zipLabel(country?: string) { return country === 'Canada' ? 'Postal Code' : 'Zip Code'; }
 
 export function MilitaryAndEmployment() {
-  const { control, watch } = useFormContext();
-  const served = watch('military.served');
+  const { control } = useFormContext();
   const { fields, append, remove } = useFieldArray({ control, name: "employment" });
-  const allEmployments = watch('employment') || [];
+  const allEmployments = useFormContext().watch('employment') || [];
 
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-2xl font-bold">Military & Employment History</h2>
-        <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-2xl flex gap-3 border border-blue-100 dark:border-blue-800">
-          <Info className="text-logistics-blue shrink-0" size={20} />
-          <p className="text-xs text-blue-800 dark:text-blue-300 leading-relaxed">
-            DOT regulations require us to collect up to 10 years of employment history: all employers from the past 3 years, plus any employers where you drove a commercial motor vehicle going back an additional 7 years (10 years total).
+        <h2 className="text-2xl font-bold">Employment History</h2>
+        <div className="mt-4 p-4 bg-amber-50 dark:bg-amber-900/20 rounded-2xl flex gap-3 border border-amber-200 dark:border-amber-700">
+          <Info className="text-amber-500 shrink-0" size={20} />
+          <p className="text-xs text-amber-800 dark:text-amber-300 leading-relaxed">
+            DOT regulations require us to collect up to 10 years of employment history: all employers from the past 3 years, plus any employers where you drove a commercial motor vehicle going back an additional 7 years (10 years total). <strong>Include any military experience.</strong> Please start from your most recent employer.
           </p>
         </div>
       </div>
 
       <div className="space-y-6">
-        <RadioGroup name="military.served" label="Were you ever in the military?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
-        {served === 'Yes' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 bg-slate-50 dark:bg-slate-800/30 rounded-2xl border border-slate-100 dark:border-slate-800">
-            <Input name="military.country" label="Country" />
-            <Input name="military.branch" label="Branch of Service" />
-            <Input name="military.startDate" label="Start Date" type="date" />
-            <Input name="military.endDate" label="End Date" type="date" />
-            <Input name="military.rankAtDischarge" label="Rank at Discharge" />
-            <div className="space-y-1">
-                <RadioGroup name="military.canObtainDD214" label="Can you obtain your DD214?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
-                <p className="text-xs text-slate-500 dark:text-slate-400 ml-1">DD214 = Certificate of Release or Discharge from Active Duty.</p>
-              </div>
-          </div>
-        )}
-      </div>
-
-      <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <h3 className="font-bold">Previous Employment</h3>
+          <h3 className="font-bold">Employment Records</h3>
           <button
             type="button"
-            onClick={() => append({ company: '', startDate: '', endDate: '', address: '', city: '', state: '', zip: '', country: 'USA', phone: '', position: '', reasonForLeaving: '', terminated: 'No', isCurrent: 'No', mayContact: 'No', operatedCMV: 'No' })}
+            onClick={() => append({ company: '', startDate: '', endDate: '', address: '', city: '', state: '', zip: '', country: 'USA', phone: '', position: '', reasonForLeaving: '', terminated: 'No', isCurrent: 'No', mayContact: 'No', operatedCMV: 'No', subjectToFMCSR: 'No', safetySensitiveFunction: 'No' })}
             className="flex items-center gap-2 text-xs font-bold bg-logistics-blue text-white px-4 py-2 rounded-xl hover:opacity-90 transition-all"
           >
             <Plus size={16} /> Add Employer
@@ -96,8 +78,10 @@ export function MilitaryAndEmployment() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-slate-200 dark:border-slate-700">
                <RadioGroup name={`employment.${index}.terminated`} label="Were you terminated/discharged/laid off?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
                <RadioGroup name={`employment.${index}.isCurrent`} label="Is this your current employer?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
-               <RadioGroup name={`employment.${index}.mayContact`} label="May we contact this employer at this time?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
+               <RadioGroup name={`employment.${index}.mayContact`} label="May we contact this employer for employment verification?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
                <RadioGroup name={`employment.${index}.operatedCMV`} label="Did you operate a commercial motor vehicle?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
+               <RadioGroup name={`employment.${index}.subjectToFMCSR`} label="While employed here, were you subject to the Federal Motor Carrier Safety Regulations?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
+               <RadioGroup name={`employment.${index}.safetySensitiveFunction`} label="Was the job designated as a safety-sensitive function in any DOT-regulated mode subject to alcohol and controlled substances testing as required by 49 CFR Part 40?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
             </div>
           </div>
         ))}

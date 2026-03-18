@@ -1,0 +1,219 @@
+{
+  "personal": {
+    "firstName": "James",
+    "middleName": "Robert",
+    "lastName": "Hartwell",
+    "suffix": "",
+    "residenceThreeYears": "Yes",
+    "currentAddress": "4821 Oak Ridge Drive",
+    "city": "Nashville",
+    "state": "TN",
+    "zip": "37201",
+    "country": "USA",
+    "ssn": "512347890",
+    "dob": "1978-06-14",
+    "phone": "615-555-0142",
+    "preferredContact": "Phone",
+    "bestTimeToContact": "Mornings",
+    "email": "james.hartwell@email.com",
+    "privacyAgreement": true
+  },
+  "general": {
+    "position": "Company Driver",
+    "currentlyEmployed": "Yes",
+    "englishProficiency": "Yes",
+    "workedHereBefore": "No",
+    "hasTwic": "Yes",
+    "twicExpiration": "2027-09-30",
+    "knownByOtherName": "No",
+    "referredByDriver": "No",
+    "eligibleUSA": "Yes",
+    "eligibleCanada": "No"
+  },
+  "experience": {
+    "straightTruck": {
+      "hasExperience": "Yes",
+      "years": "5"
+    },
+    "tractorSemi": {
+      "hasExperience": "Yes",
+      "years": "12"
+    },
+    "tractorTwoTrailers": {
+      "hasExperience": "Yes",
+      "years": "8"
+    },
+    "flatbed": {
+      "hasExperience": "Yes",
+      "years": "6"
+    },
+    "hazmat": {
+      "hasExperience": "Yes",
+      "years": "4"
+    },
+    "dryvan": {
+      "hasExperience": "Yes",
+      "years": "12"
+    },
+    "reefer": {
+      "hasExperience": "Yes",
+      "years": "7"
+    },
+    "tanker": {
+      "hasExperience": "No"
+    },
+    "lumber": {
+      "hasExperience": "No"
+    },
+    "crossBorderCanada": {
+      "hasExperience": "Yes",
+      "years": "3"
+    },
+    "crossBorderUSA": {
+      "hasExperience": "Yes",
+      "years": "12"
+    },
+    "bondedLoads": {
+      "hasExperience": "Yes",
+      "years": "2"
+    },
+    "others": "Auto transport (3 years)",
+    "autoTransport": {
+      "hasExperience": "No"
+    }
+  },
+  "licenses": [
+    {
+      "licenseNumber": "TN-CDL-8841023",
+      "state": "TN",
+      "country": "USA",
+      "class": "A",
+      "expirationDate": "2028-06-14",
+      "dotMedicalExpiration": "2026-07-01",
+      "isCurrent": true,
+      "isCDL": true,
+      "endorsements": [
+        "H",
+        "N",
+        "T",
+        "X"
+      ]
+    }
+  ],
+  "military": {
+    "served": "No"
+  },
+  "employment": [
+    {
+      "company": "Keystone Freight Lines",
+      "startDate": "2018-03-01",
+      "endDate": "2026-03-01",
+      "address": "1200 Industrial Blvd",
+      "city": "Memphis",
+      "state": "TN",
+      "zip": "38101",
+      "country": "USA",
+      "phone": "901-555-0200",
+      "position": "Senior Long-Haul Driver",
+      "reasonForLeaving": "Seeking new opportunities and better compensation",
+      "terminated": "No",
+      "isCurrent": "Yes",
+      "mayContact": "Yes",
+      "operatedCMV": "Yes",
+      "subjectToFMCSR": "Yes",
+      "safetySensitiveFunction": "Yes"
+    },
+    {
+      "company": "Blue Ridge Transport Co.",
+      "startDate": "2013-01-15",
+      "endDate": "2018-02-28",
+      "address": "550 Commerce Street",
+      "city": "Knoxville",
+      "state": "TN",
+      "zip": "37902",
+      "country": "USA",
+      "phone": "865-555-0310",
+      "position": "OTR Driver",
+      "reasonForLeaving": "Company downsizing",
+      "terminated": "No",
+      "isCurrent": "No",
+      "mayContact": "Yes",
+      "operatedCMV": "Yes",
+      "subjectToFMCSR": "Yes",
+      "safetySensitiveFunction": "Yes"
+    }
+  ],
+  "training": {
+    "attended": "Yes",
+    "schoolName": "Tennessee Truck Driving Academy",
+    "startDate": "2012-08-01",
+    "endDate": "2012-11-30",
+    "state": "TN",
+    "address": "3400 Highway 70 E",
+    "city": "Nashville",
+    "country": "USA",
+    "phone": "615-555-0099",
+    "graduated": "Yes",
+    "subjectToFMCSR": "Yes",
+    "safetySensitive": "Yes",
+    "gpa": "3.8",
+    "hoursOfInstruction": "320",
+    "skillsTrained": [
+      "Pre-trip inspection",
+      "Defensive driving",
+      "Hazmat handling",
+      "Trip planning",
+      "Log books"
+    ]
+  },
+  "education": {
+    "attended": "Yes",
+    "schoolName": "Nashville State Community College",
+    "startDate": "2010-08-01",
+    "endDate": "2012-05-15",
+    "city": "Nashville",
+    "state": "TN",
+    "country": "USA",
+    "phone": "615-555-0400",
+    "studyField": "Business Management",
+    "graduationDate": "2012-05-15"
+  },
+  "unemployment": {
+    "unemployed": "No"
+  },
+  "fmcsr": {
+    "deniedSuspended": "No",
+    "convictedSuspension": "No",
+    "convictedAlcohol": "No",
+    "convictedPossession": "No",
+    "convictedReckless": "No",
+    "drugTestPositiveRefused": "No",
+    "hasViolations": "Yes",
+    "violations": [
+      {
+        "date": "2019-08-22",
+        "description": "Speeding \u00e2\u20ac\u201c 12 mph over limit on I-40",
+        "state": "TN",
+        "isCommercial": "Yes",
+        "penalties": [
+          "Fine"
+        ],
+        "fineAmount": "175",
+        "comments": "Paid fine in full. No points on CDL."
+      }
+    ],
+    "hasAccidents": "No"
+  },
+  "documents": [],
+  "disclosures": {
+    "fcraAcknowledgment": true,
+    "pspAcknowledgment": true,
+    "consumerReportAuth": true,
+    "part391Auth": true
+  },
+  "signature": {
+    "signatureName": "James Robert Hartwell",
+    "signatureDate": "2026-03-18",
+    "agreedToElectronic": true
+  }
+}
