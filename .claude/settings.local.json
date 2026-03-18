@@ -7,7 +7,8 @@
       "Bash(python -c \":*)",
       "Bash(pip install:*)",
       "Bash(vercel --version)",
-      "Bash(vercel whoami:*)"
+      "Bash(vercel whoami:*)",
+      "Bash(curl:*)"
     ]
   }
 }
