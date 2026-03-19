@@ -6,19 +6,19 @@ import { cn } from '../lib/utils';
 function stateLabel(country?: string) { return country === 'Canada' ? 'Province' : 'State'; }
 
 const EXP_TYPES = [
-  { id: 'straightTruck', label: 'Straight Truck' },
-  { id: 'tractorSemi', label: 'Tractor and Semi-Trailer' },
-  { id: 'tractorTwoTrailers', label: 'Tractor - Two Trailers' },
-  { id: 'flatbed', label: 'Flatbed' },
-  { id: 'hazmat', label: 'Hazmat' },
-  { id: 'dryvan', label: 'Dry Van' },
-  { id: 'reefer', label: 'Reefer' },
-  { id: 'tanker', label: 'Tanker' },
-  { id: 'lumber', label: 'Lumber' },
-  { id: 'autoTransport', label: 'Auto Transport' },
-  { id: 'crossBorderCanada', label: 'Cross-Border Canada and USA' },
-  { id: 'crossBorderUSA', label: 'Cross-Border USA and Mexico' },
-  { id: 'bondedLoads', label: 'Bonded Loads' },
+  { id: 'straightTruck', label: 'Straight Truck', simple: false },
+  { id: 'tractorSemi', label: 'Tractor and Semi-Trailer', simple: false },
+  { id: 'tractorTwoTrailers', label: 'Tractor - Two Trailers', simple: false },
+  { id: 'flatbed', label: 'Flatbed', simple: false },
+  { id: 'hazmat', label: 'Hazmat', simple: false },
+  { id: 'dryvan', label: 'Dry Van', simple: false },
+  { id: 'reefer', label: 'Reefer', simple: false },
+  { id: 'tanker', label: 'Tanker', simple: false },
+  { id: 'lumber', label: 'Lumber', simple: false },
+  { id: 'autoTransport', label: 'Auto Transport', simple: false },
+  { id: 'crossBorderCanada', label: 'Cross-Border Canada and USA', simple: true },
+  { id: 'crossBorderUSA', label: 'Cross-Border USA and Mexico', simple: true },
+  { id: 'bondedLoads', label: 'Bonded Loads', simple: true },
 ];
 
 export function DrivingExperience() {
@@ -45,7 +45,7 @@ export function DrivingExperience() {
                   className="space-y-0 shrink-0"
                 />
               </div>
-              {hasExp === 'Yes' && (
+              {hasExp === 'Yes' && !type.simple && (
                 <div className="mt-3 pt-3 border-t border-slate-200 dark:border-slate-700 space-y-3">
                   <div className="grid grid-cols-2 gap-4">
                     <Input
@@ -56,9 +56,9 @@ export function DrivingExperience() {
                     />
                     <Input
                       name={`experience.${type.id}.miles`}
-                      label="Approximate Miles Driven"
+                      label="Approximate Miles Driven (Weekly)"
                       type="number"
-                      placeholder="e.g. 150000"
+                      placeholder="e.g. 2500"
                     />
                   </div>
                   <Input

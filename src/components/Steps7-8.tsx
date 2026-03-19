@@ -28,9 +28,11 @@ export function FMCSR() {
         <p className="text-slate-500 dark:text-slate-400 text-sm">Federal Motor Carrier Safety Regulations requirements.</p>
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-4">
         {QUESTIONS.map(q => (
-          <RadioGroup key={q.name} name={q.name} label={q.label} options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
+          <div key={q.name} className="p-5 bg-slate-50 dark:bg-slate-800/30 rounded-2xl border border-slate-200 dark:border-slate-700">
+            <RadioGroup name={q.name} label={q.label} options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
+          </div>
         ))}
       </div>
 
@@ -110,7 +112,6 @@ export function FMCSR() {
           </div>
         )}
       </div>
-      <Input name="fmcsr.otherDetails" label="If you answered 'Other' or 'Yes' to any major offense, please provide detail:" />
     </div>
   );
 }

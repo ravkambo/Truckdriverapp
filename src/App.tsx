@@ -193,8 +193,24 @@ export default function App() {
   };
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
+  const FIELD_TO_STEP: Record<string, number> = {
+    personal: 0, licenses: 1, general: 2, experience: 3,
+    employment: 4, training: 5, education: 5, unemployment: 5,
+    fmcsr: 6, documents: 7, disclosures: 8, signature: 8,
+  };
+
+  const onInvalid = (errors: Record<string, any>) => {
+    const firstErrorField = Object.keys(errors)[0];
+    const targetStep = FIELD_TO_STEP[firstErrorField] ?? 0;
+    setCurrentStep(targetStep);
+    window.scrollTo(0, 0);
+    setSubmitError('Some required fields are incomplete. The first section with errors has been highlighted.');
+  };
 
   const onSubmit = async (data: FullApplication) => {
+    setSubmitError(null);
     setIsSubmitting(true);
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL ?? ''}/submit-application`, {
@@ -327,7 +343,7 @@ export default function App() {
 
           <div className="lg:col-span-3">
             <FormProvider {...methods}>
-              <form onSubmit={handleSubmit(onSubmit)} className="bg-white dark:bg-slate-900 p-8 md:p-12 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 min-h-[600px] flex flex-col">
+              <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="bg-white dark:bg-slate-900 p-8 md:p-12 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 min-h-[600px] flex flex-col">
                 <div className="flex-grow">
                   <AnimatePresence mode="wait">
                     <motion.div key={currentStep} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.2 }}>
@@ -345,13 +361,18 @@ export default function App() {
                 </div>
 
                 <div className="mt-12 pt-8 border-t border-slate-100 dark:border-slate-800 flex flex-col gap-4">
+                  {submitError && (
+                    <div className="p-4 bg-rose-50 dark:bg-rose-900/20 border border-rose-200 dark:border-rose-800 rounded-xl text-sm text-rose-700 dark:text-rose-300 font-semibold">
+                      {submitError}
+                    </div>
+                  )}
                   <div className="flex items-center justify-between">
                     <button type="button" onClick={prevStep} disabled={currentStep === 0} className={cn("flex items-center gap-2 text-sm font-bold uppercase tracking-widest px-8 py-3.5 rounded-xl transition-all", currentStep === 0 ? "opacity-0 pointer-events-none" : "hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400")}>
                       <ChevronLeft size={18} /> Back
                     </button>
                     {currentStep === STEPS.length - 1 ? (
-                      <button type="submit" className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest bg-emerald-600 text-white px-12 py-3.5 rounded-xl hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20">
-                        Submit Profile <CheckCircle2 size={18} />
+                      <button type="submit" disabled={isSubmitting} className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest bg-emerald-600 text-white px-12 py-3.5 rounded-xl hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20 disabled:opacity-60 disabled:cursor-not-allowed">
+                        {isSubmitting ? 'Submitting...' : <> Submit Profile <CheckCircle2 size={18} /> </>}
                       </button>
                     ) : (
                       <button type="button" onClick={nextStep} className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest bg-logistics-blue text-white px-12 py-3.5 rounded-xl hover:opacity-90 transition-all shadow-lg shadow-logistics-blue/20">

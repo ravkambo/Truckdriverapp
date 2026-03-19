@@ -54,8 +54,8 @@ export function MilitaryAndEmployment() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Input name={`employment.${index}.company`} label="Company Name" required />
               <div className="grid grid-cols-2 gap-4">
-                <Input name={`employment.${index}.startDate`} label="Start Date" type="date" required />
-                <Input name={`employment.${index}.endDate`} label="End Date" type="date" required />
+                <Input name={`employment.${index}.startDate`} label="Start Date" type="month" required />
+                <Input name={`employment.${index}.endDate`} label="End Date" type="month" required />
               </div>
             </div>
 
@@ -80,8 +80,8 @@ export function MilitaryAndEmployment() {
                <RadioGroup name={`employment.${index}.isCurrent`} label="Is this your current employer?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
                <RadioGroup name={`employment.${index}.mayContact`} label="May we contact this employer for employment verification?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
                <RadioGroup name={`employment.${index}.operatedCMV`} label="Did you operate a commercial motor vehicle?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
-               <RadioGroup name={`employment.${index}.subjectToFMCSR`} label="While employed here, were you subject to the Federal Motor Carrier Safety Regulations?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
-               <RadioGroup name={`employment.${index}.safetySensitiveFunction`} label="Was the job designated as a safety-sensitive function in any DOT-regulated mode subject to alcohol and controlled substances testing as required by 49 CFR Part 40?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
+               <RadioGroup name={`employment.${index}.subjectToFMCSR`} label="Were you subject to Federal Motor Carrier or Transport Canada Safety Regulations while employed/contracted by this employer/contractor?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
+               <RadioGroup name={`employment.${index}.safetySensitiveFunction`} label="Did you perform any safety-sensitive functions in this job, regulated by DOT and subject to drug and alcohol testing?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
             </div>
           </div>
         ))}
@@ -184,7 +184,7 @@ export function TrainingAndEducation() {
       <div className="space-y-6">
         <div className="space-y-1">
           <RadioGroup name="unemployment.unemployed" label="Have you been unemployed at any time within the last 3 years?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
-          <p className="text-xs text-slate-500 dark:text-slate-400 ml-1">Required by DOT regulations for all applicants. Gaps between jobs are normal and expected.</p>
+          <p className="text-xs text-amber-600 dark:text-amber-400 ml-1">Don't worry — employment gaps are completely normal and expected. We just need to account for the full timeline as part of the application process.</p>
         </div>
         {isUnemployed === 'Yes' && (
           <div className="space-y-4">
