@@ -42,7 +42,7 @@ export function FMCSR() {
                   {(['Yes', 'No'] as const).map(opt => (
                     <label key={opt} className={cn(
                       "flex items-center justify-center px-5 py-2 rounded-xl border-2 text-sm font-bold cursor-pointer transition-all",
-                      val === opt && opt === 'Yes' ? "bg-rose-500 border-rose-500 text-white" :
+                      val === opt && opt === 'Yes' ? "bg-amber-500 border-amber-500 text-white" :
                       val === opt && opt === 'No'  ? "bg-emerald-500 border-emerald-500 text-white" :
                       "border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600"
                     )}>

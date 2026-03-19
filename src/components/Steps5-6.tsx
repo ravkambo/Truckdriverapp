@@ -108,83 +108,154 @@ export function TrainingAndEducation() {
         <p className="text-slate-500 dark:text-slate-400 text-sm">Please detail your driver training and other educational background.</p>
       </div>
 
-      <div className="space-y-6">
-        <RadioGroup name="training.attended" label="Have you attended a driver training school?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
-        {attendedTraining === 'Yes' && (
-          <div className="p-8 bg-slate-50 dark:bg-slate-800/30 rounded-3xl border border-slate-100 dark:border-slate-800 space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Input name="training.schoolName" label="School Name" />
-              <div className="grid grid-cols-2 gap-4">
-                <Input name="training.startDate" label="Start Date" type="date" />
-                <Input name="training.endDate" label="End Date" type="date" />
-              </div>
-            </div>
-            <Input name="training.address" label="Address" />
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <Input name="training.city" label="City" />
-              <Input name="training.state" label={stateLabel(trainingCountry)} />
-              <Select name="training.country" label="Country" options={[{label:'USA', value:'USA'}, {label:'Canada', value:'Canada'}]} />
-              <Input name="training.phone" label="Telephone" />
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4 border-t border-slate-200 dark:border-slate-700">
-               <RadioGroup name="training.graduated" label="Did you graduate?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
-               <div className="space-y-1">
-                 <RadioGroup name="training.subjectToFMCSR" label="Subject to FMCSR / TC safety regs?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
-                 <p className="text-xs text-slate-500 dark:text-slate-400 ml-1">FMCSR = Federal Motor Carrier Safety Regulations. TC = Transport Canada.</p>
-               </div>
-               <RadioGroup name="training.safetySensitive" label="Performed safety sensitive functions?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
-            </div>
-            <div className="grid grid-cols-1 gap-6">
-               <Input name="training.hoursOfInstruction" label="Hours of Instruction" />
-            </div>
-            <div className="space-y-4">
-              <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Skills Trained (Select all that apply)</label>
-              <div className="grid grid-cols-2 gap-4">
-                {TRAINING_SKILLS.map(s => (
-                  <label key={s} className="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 cursor-pointer hover:border-logistics-blue transition-all group">
-                    <div className={cn(
-                      "w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all",
-                      (watch('training.skillsTrained') || []).includes(s) ? "bg-logistics-blue border-logistics-blue" : "border-slate-200 dark:border-slate-700 group-hover:border-slate-300"
-                    )}>
-                      {(watch('training.skillsTrained') || []).includes(s) && <div className="w-2.5 h-2.5 bg-white rounded-sm" />}
-                    </div>
-                    <input type="checkbox" value={s} {...control.register('training.skillsTrained')} className="hidden" />
-                    <span className="text-sm font-bold text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white">{s}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
+      {/* Driver Training School */}
+      <div className="flex gap-4 items-start p-5 bg-slate-50 dark:bg-slate-800/30 rounded-2xl border-l-4 border border-slate-200 dark:border-slate-700 border-l-slate-300 dark:border-l-slate-600">
+        <div className="flex-1 space-y-3">
+          <p className="text-sm font-medium text-slate-700 dark:text-slate-300 leading-relaxed">Have you attended a driver training school?</p>
+          <div className="flex gap-2">
+            {(['Yes', 'No'] as const).map(opt => (
+              <label key={opt} className={cn(
+                "flex items-center justify-center px-5 py-2 rounded-xl border-2 text-sm font-bold cursor-pointer transition-all",
+                attendedTraining === opt && opt === 'Yes' ? "bg-emerald-500 border-emerald-500 text-white" :
+                attendedTraining === opt && opt === 'No'  ? "bg-emerald-500 border-emerald-500 text-white" :
+                "border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600"
+              )}>
+                <input type="radio" value={opt} {...control.register('training.attended')} className="hidden" />
+                {opt}
+              </label>
+            ))}
           </div>
-        )}
+        </div>
       </div>
 
-      <div className="space-y-6">
-        <RadioGroup name="education.attended" label="Have you attended a school (not related to truck driving) in the last 3 years?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
-        {attendedOtherSchool === 'Yes' && (
-          <div className="p-8 bg-slate-50 dark:bg-slate-800/30 rounded-3xl border border-slate-100 dark:border-slate-800 space-y-6">
-            <Input name="education.schoolName" label="School Name" />
+      {attendedTraining === 'Yes' && (
+        <div className="p-8 bg-slate-50 dark:bg-slate-800/30 rounded-3xl border border-slate-100 dark:border-slate-800 space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Input name="training.schoolName" label="School Name" />
             <div className="grid grid-cols-2 gap-4">
-              <Input name="education.startDate" label="Start Date" type="date" />
-              <Input name="education.endDate" label="End Date" type="date" />
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <Input name="education.city" label="City" />
-              <Input name="education.state" label={stateLabel(educationCountry)} />
-              <Select name="education.country" label="Country" options={[{label:'USA', value:'USA'}, {label:'Canada', value:'Canada'}]} />
-              <Input name="education.phone" label="Telephone" />
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Input name="education.studyField" label="What did you study?" placeholder="e.g., Accounting, Mechanic" />
-              <Input name="education.graduationDate" label="Graduation Date (Leave blank if no graduation)" type="date" />
+              <Input name="training.startDate" label="Start Date" type="date" />
+              <Input name="training.endDate" label="End Date" type="date" />
             </div>
           </div>
-        )}
+          <Input name="training.address" label="Address" />
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <Input name="training.city" label="City" />
+            <Input name="training.state" label={stateLabel(trainingCountry)} />
+            <Select name="training.country" label="Country" options={[{label:'USA', value:'USA'}, {label:'Canada', value:'Canada'}]} />
+            <Input name="training.phone" label="Telephone" />
+          </div>
+
+          <div className="space-y-3 pt-4 border-t border-slate-200 dark:border-slate-700">
+            {[
+              { name: 'training.graduated', label: 'Did you graduate?' },
+              { name: 'training.subjectToFMCSR', label: 'Was this program subject to FMCSR / Transport Canada safety regulations?', hint: 'FMCSR = Federal Motor Carrier Safety Regulations. TC = Transport Canada.' },
+              { name: 'training.safetySensitive', label: 'Did the program include safety-sensitive function training?' },
+            ].map(q => (
+              <div key={q.name} className="flex gap-4 items-start p-4 bg-white dark:bg-slate-900 rounded-2xl border-l-4 border border-slate-100 dark:border-slate-800 border-l-slate-200 dark:border-l-slate-700">
+                <div className="flex-1 space-y-2">
+                  <p className="text-sm font-medium text-slate-700 dark:text-slate-300">{q.label}</p>
+                  {q.hint && <p className="text-xs text-slate-400 dark:text-slate-500">{q.hint}</p>}
+                  <div className="flex gap-2">
+                    {(['Yes', 'No'] as const).map(opt => {
+                      const val = watch(q.name);
+                      return (
+                        <label key={opt} className={cn(
+                          "flex items-center justify-center px-5 py-2 rounded-xl border-2 text-sm font-bold cursor-pointer transition-all",
+                          val === opt ? "bg-emerald-500 border-emerald-500 text-white" :
+                          "border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600"
+                        )}>
+                          <input type="radio" value={opt} {...control.register(q.name as any)} className="hidden" />
+                          {opt}
+                        </label>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <Input name="training.hoursOfInstruction" label="Hours of Instruction" />
+
+          <div className="space-y-4">
+            <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Skills Trained (Select all that apply)</label>
+            <div className="grid grid-cols-2 gap-4">
+              {TRAINING_SKILLS.map(s => (
+                <label key={s} className="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 cursor-pointer hover:border-logistics-blue transition-all group">
+                  <div className={cn(
+                    "w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all",
+                    (watch('training.skillsTrained') || []).includes(s) ? "bg-logistics-blue border-logistics-blue" : "border-slate-200 dark:border-slate-700 group-hover:border-slate-300"
+                  )}>
+                    {(watch('training.skillsTrained') || []).includes(s) && <div className="w-2.5 h-2.5 bg-white rounded-sm" />}
+                  </div>
+                  <input type="checkbox" value={s} {...control.register('training.skillsTrained')} className="hidden" />
+                  <span className="text-sm font-bold text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white">{s}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Other Education */}
+      <div className="flex gap-4 items-start p-5 bg-slate-50 dark:bg-slate-800/30 rounded-2xl border-l-4 border border-slate-200 dark:border-slate-700 border-l-slate-300 dark:border-l-slate-600">
+        <div className="flex-1 space-y-3">
+          <p className="text-sm font-medium text-slate-700 dark:text-slate-300 leading-relaxed">Have you attended any other school or educational program in the last 3 years?</p>
+          <div className="flex gap-2">
+            {(['Yes', 'No'] as const).map(opt => (
+              <label key={opt} className={cn(
+                "flex items-center justify-center px-5 py-2 rounded-xl border-2 text-sm font-bold cursor-pointer transition-all",
+                attendedOtherSchool === opt ? "bg-emerald-500 border-emerald-500 text-white" :
+                "border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600"
+              )}>
+                <input type="radio" value={opt} {...control.register('education.attended')} className="hidden" />
+                {opt}
+              </label>
+            ))}
+          </div>
+        </div>
       </div>
 
+      {attendedOtherSchool === 'Yes' && (
+        <div className="p-8 bg-slate-50 dark:bg-slate-800/30 rounded-3xl border border-slate-100 dark:border-slate-800 space-y-6">
+          <Input name="education.schoolName" label="School Name" />
+          <div className="grid grid-cols-2 gap-4">
+            <Input name="education.startDate" label="Start Date" type="date" />
+            <Input name="education.endDate" label="End Date" type="date" />
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <Input name="education.city" label="City" />
+            <Input name="education.state" label={stateLabel(educationCountry)} />
+            <Select name="education.country" label="Country" options={[{label:'USA', value:'USA'}, {label:'Canada', value:'Canada'}]} />
+            <Input name="education.phone" label="Telephone" />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Input name="education.studyField" label="What did you study?" placeholder="e.g., Accounting, Mechanic" />
+            <Input name="education.graduationDate" label="Graduation Date (Leave blank if no graduation)" type="date" />
+          </div>
+        </div>
+      )}
+
+      {/* Unemployment */}
       <div className="space-y-6">
-        <div className="space-y-1">
-          <RadioGroup name="unemployment.unemployed" label="Have you been unemployed at any time within the last 3 years?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
-          <p className="text-xs text-amber-600 dark:text-amber-400 ml-1">Don't worry — employment gaps are completely normal and expected. We just need to account for the full timeline as part of the application process.</p>
+        <div className="flex gap-4 items-start p-5 bg-slate-50 dark:bg-slate-800/30 rounded-2xl border-l-4 border-l-amber-400 border border-slate-200 dark:border-slate-700">
+          <div className="flex-1 space-y-3">
+            <p className="text-sm font-medium text-slate-700 dark:text-slate-300 leading-relaxed">Have you been unemployed at any time within the last 3 years?</p>
+            <p className="text-xs text-amber-600 dark:text-amber-400">Don't worry — employment gaps are completely normal and expected. We just need to account for the full timeline as part of the application process.</p>
+            <div className="flex gap-2">
+              {(['Yes', 'No'] as const).map(opt => (
+                <label key={opt} className={cn(
+                  "flex items-center justify-center px-5 py-2 rounded-xl border-2 text-sm font-bold cursor-pointer transition-all",
+                  isUnemployed === opt && opt === 'Yes' ? "bg-amber-500 border-amber-500 text-white" :
+                  isUnemployed === opt && opt === 'No'  ? "bg-emerald-500 border-emerald-500 text-white" :
+                  "border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600"
+                )}>
+                  <input type="radio" value={opt} {...control.register('unemployment.unemployed')} className="hidden" />
+                  {opt}
+                </label>
+              ))}
+            </div>
+          </div>
         </div>
         {isUnemployed === 'Yes' && (
           <div className="space-y-4">
