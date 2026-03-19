@@ -11,12 +11,12 @@ export function FMCSR() {
   const { fields: aFields, append: aAppend, remove: aRemove } = useFieldArray({ control, name: "fmcsr.accidents" });
 
   const QUESTIONS = [
-    { name: 'fmcsr.deniedSuspended', label: '1. Has any license, permit or privilege ever been denied, suspended or revoked for any reason?' },
-    { name: 'fmcsr.convictedSuspension', label: '2. Have you ever been convicted of driving during license suspension or revocation, or driving without a valid license or an expired license, or are any charges pending?' },
-    { name: 'fmcsr.convictedAlcohol', label: '3. Have you ever been convicted for any alcohol or controlled substance related offense while operating a motor vehicle, or are any charges pending?' },
-    { name: 'fmcsr.convictedPossession', label: '4. Have you ever been convicted for possession, sale or transfer of an illegal substance (including but not limited to, marijuana, amphetamines, or derivatives thereof) while on duty, or are any charges pending?' },
-    { name: 'fmcsr.convictedReckless', label: '5. Have you ever been convicted of reckless driving, careless driving or careless operation of a motor vehicle, or are any charges pending?' },
-    { name: 'fmcsr.drugTestPositiveRefused', label: '6. Have you ever tested positive, or refused to test on a pre-employment drug or alcohol test by an employer to whom you applied, but did not obtain safety-sensitive transportation work covered by DOT agency drug and alcohol testing rules in past three years, or have you ever tested positive or refused to test on any DOT-mandated drug or alcohol test?' },
+    { name: 'fmcsr.deniedSuspended', num: 1, label: 'Has any license, permit or privilege ever been denied, suspended or revoked for any reason?' },
+    { name: 'fmcsr.convictedSuspension', num: 2, label: 'Have you ever been convicted of driving during license suspension or revocation, or driving without a valid license or an expired license, or are any charges pending?' },
+    { name: 'fmcsr.convictedAlcohol', num: 3, label: 'Have you ever been convicted for any alcohol or controlled substance related offense while operating a motor vehicle, or are any charges pending?' },
+    { name: 'fmcsr.convictedPossession', num: 4, label: 'Have you ever been convicted for possession, sale or transfer of an illegal substance (including but not limited to, marijuana, amphetamines, or derivatives thereof) while on duty, or are any charges pending?' },
+    { name: 'fmcsr.convictedReckless', num: 5, label: 'Have you ever been convicted of reckless driving, careless driving or careless operation of a motor vehicle, or are any charges pending?' },
+    { name: 'fmcsr.drugTestPositiveRefused', num: 6, label: 'Have you ever tested positive, or refused to test on a pre-employment drug or alcohol test by an employer to whom you applied, but did not obtain safety-sensitive transportation work covered by DOT agency drug and alcohol testing rules in the past three years, or have you ever tested positive or refused to test on any DOT-mandated drug or alcohol test?' },
   ];
 
   const PENALTIES = ['Fine', 'Suspension', 'Revocation', 'Community Service', 'Other'];
@@ -28,16 +28,54 @@ export function FMCSR() {
         <p className="text-slate-500 dark:text-slate-400 text-sm">Federal Motor Carrier Safety Regulations requirements.</p>
       </div>
 
-      <div className="space-y-4">
-        {QUESTIONS.map(q => (
-          <div key={q.name} className="p-5 bg-slate-50 dark:bg-slate-800/30 rounded-2xl border border-slate-200 dark:border-slate-700">
-            <RadioGroup name={q.name} label={q.label} options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
-          </div>
-        ))}
+      <div className="space-y-3">
+        {QUESTIONS.map(q => {
+          const val = watch(q.name);
+          return (
+            <div key={q.name} className="flex gap-4 items-start p-5 bg-slate-50 dark:bg-slate-800/30 rounded-2xl border-l-4 border border-slate-200 dark:border-slate-700 border-l-slate-300 dark:border-l-slate-600">
+              <div className="shrink-0 w-7 h-7 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-xs font-bold text-slate-600 dark:text-slate-300 mt-0.5">
+                {q.num}
+              </div>
+              <div className="flex-1 space-y-3">
+                <p className="text-sm font-medium text-slate-700 dark:text-slate-300 leading-relaxed">{q.label}</p>
+                <div className="flex gap-2">
+                  {(['Yes', 'No'] as const).map(opt => (
+                    <label key={opt} className={cn(
+                      "flex items-center justify-center px-5 py-2 rounded-xl border-2 text-sm font-bold cursor-pointer transition-all",
+                      val === opt && opt === 'Yes' ? "bg-rose-500 border-rose-500 text-white" :
+                      val === opt && opt === 'No'  ? "bg-emerald-500 border-emerald-500 text-white" :
+                      "border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600"
+                    )}>
+                      <input type="radio" value={opt} {...control.register(q.name)} className="hidden" />
+                      {opt}
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       <div className="pt-8 border-t border-slate-100 dark:border-slate-800 space-y-6">
-        <RadioGroup name="fmcsr.hasViolations" label="Have you had any moving violations or traffic convictions in the past 3 Years?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
+        <div className="flex gap-4 items-start p-5 bg-slate-50 dark:bg-slate-800/30 rounded-2xl border-l-4 border border-slate-200 dark:border-slate-700 border-l-amber-400">
+          <div className="flex-1 space-y-3">
+            <p className="text-sm font-medium text-slate-700 dark:text-slate-300 leading-relaxed">Have you had any moving violations or traffic convictions in the past 3 years?</p>
+            <div className="flex gap-2">
+              {(['Yes', 'No'] as const).map(opt => (
+                <label key={opt} className={cn(
+                  "flex items-center justify-center px-5 py-2 rounded-xl border-2 text-sm font-bold cursor-pointer transition-all",
+                  hasViolations === opt && opt === 'Yes' ? "bg-amber-500 border-amber-500 text-white" :
+                  hasViolations === opt && opt === 'No'  ? "bg-emerald-500 border-emerald-500 text-white" :
+                  "border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600"
+                )}>
+                  <input type="radio" value={opt} {...control.register('fmcsr.hasViolations')} className="hidden" />
+                  {opt}
+                </label>
+              ))}
+            </div>
+          </div>
+        </div>
         {hasViolations === 'Yes' && (
           <div className="space-y-4">
              <div className="flex justify-end">
@@ -79,7 +117,24 @@ export function FMCSR() {
       </div>
 
       <div className="pt-8 border-t border-slate-100 dark:border-slate-800 space-y-6">
-        <RadioGroup name="fmcsr.hasAccidents" label="Were you involved in any accidents/incidents with any vehicle in the last 5 years?" options={[{label:'Yes', value:'Yes'}, {label:'No', value:'No'}]} />
+        <div className="flex gap-4 items-start p-5 bg-slate-50 dark:bg-slate-800/30 rounded-2xl border-l-4 border border-slate-200 dark:border-slate-700 border-l-amber-400">
+          <div className="flex-1 space-y-3">
+            <p className="text-sm font-medium text-slate-700 dark:text-slate-300 leading-relaxed">Were you involved in any accidents or incidents with any vehicle in the last 5 years?</p>
+            <div className="flex gap-2">
+              {(['Yes', 'No'] as const).map(opt => (
+                <label key={opt} className={cn(
+                  "flex items-center justify-center px-5 py-2 rounded-xl border-2 text-sm font-bold cursor-pointer transition-all",
+                  hasAccidents === opt && opt === 'Yes' ? "bg-amber-500 border-amber-500 text-white" :
+                  hasAccidents === opt && opt === 'No'  ? "bg-emerald-500 border-emerald-500 text-white" :
+                  "border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600"
+                )}>
+                  <input type="radio" value={opt} {...control.register('fmcsr.hasAccidents')} className="hidden" />
+                  {opt}
+                </label>
+              ))}
+            </div>
+          </div>
+        </div>
         {hasAccidents === 'Yes' && (
           <div className="space-y-4">
              <div className="flex justify-end">
